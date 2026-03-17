@@ -38,6 +38,8 @@ struct AboutView: View {
             }
 
             Section(L10n.string(.iletisim)) {
+                Link("melsalegal.com/support", destination: LegalLinks.supportURL)
+
                 if let supportEmailURL = LegalLinks.supportEmailURL {
                     Link(LegalLinks.supportEmail, destination: supportEmailURL)
                 } else {
