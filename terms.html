@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,95 +7,629 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f7f5ef;
-      --panel: #ffffff;
+      --bg: #f3f6f5;
+      --panel: rgba(255, 255, 255, 0.94);
       --text: #1f2937;
-      --muted: #5b6576;
+      --muted: #5f6b7b;
       --accent: #0f766e;
-      --border: #d9dfdf;
+      --accent-soft: rgba(15, 118, 110, 0.08);
+      --border: rgba(15, 23, 42, 0.10);
     }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #eef6f3 0%, var(--bg) 100%);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 24%),
+        linear-gradient(180deg, #eef7f5 0%, var(--bg) 100%);
       color: var(--text);
     }
     main {
-      max-width: 860px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 48px 20px 80px;
+      padding: 44px 20px 88px;
     }
-    section {
+    .hero, section {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      margin-top: 18px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
     }
-    h1, h2 { margin: 0 0 12px; }
-    p, li { line-height: 1.7; color: var(--muted); }
-    ul { padding-left: 20px; }
+    .hero {
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+    section {
+      padding: 24px;
+      margin-top: 16px;
+    }
     .eyebrow {
       color: var(--accent);
-      font-weight: 700;
-      letter-spacing: 0.08em;
       text-transform: uppercase;
+      letter-spacing: 0.12em;
       font-size: 12px;
+      font-weight: 700;
       margin-bottom: 10px;
     }
-    a { color: var(--accent); }
+    h1, h2 { margin: 0 0 12px; line-height: 1.2; }
+    p, li {
+      color: var(--muted);
+      line-height: 1.72;
+      margin: 0;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .pill {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    label {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    select {
+      margin-left: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+    }
+    .notice {
+      padding: 14px 16px;
+      background: rgba(124, 45, 18, 0.08);
+      border: 1px solid rgba(124, 45, 18, 0.14);
+      border-radius: 16px;
+      color: #8a4f1d;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+    @media (min-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <main>
-    <div class="eyebrow">Zikrim</div>
-    <h1>Terms of Use</h1>
-    <p>Last updated: March 17, 2026</p>
+    <div class="hero">
+      <div class="eyebrow">Zikrim</div>
+      <h1 id="title"></h1>
+      <p id="intro"></p>
+      <div class="hero-meta">
+        <div class="pill" id="updated"></div>
+        <div class="pill" id="email"></div>
+      </div>
+      <div class="toolbar">
+        <label>
+          <span id="languageLabel"></span>
+          <select id="languageSelect"></select>
+        </label>
+        <div class="notice" id="notice"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <h2 id="section1Title"></h2>
+        <ul id="section1List"></ul>
+      </section>
+      <section>
+        <h2 id="section2Title"></h2>
+        <ul id="section2List"></ul>
+      </section>
+    </div>
 
     <section>
-      <h2>Acceptance</h2>
-      <p>By downloading or using Zikrim, creating an account, using the app as a guest, or purchasing premium access, you agree to these Terms of Use.</p>
+      <h2 id="section3Title"></h2>
+      <ul id="section3List"></ul>
     </section>
 
     <section>
-      <h2>Service Description</h2>
-      <p>Zikrim may offer devotional tools such as dhikr, dua, tasbihat, prayer times, qibla, journaling, widgets, content archives, and AI-assisted spiritual features. Some features may require internet access, device permissions, an account, or an active subscription.</p>
+      <h2 id="section4Title"></h2>
+      <ul id="section4List"></ul>
     </section>
 
     <section>
-      <h2>Important Disclaimer</h2>
-      <p>Content provided in the app, including AI-assisted responses and summaries, is for informational and personal use only. It does not replace binding religious guidance, legal advice, medical advice, therapy, crisis support, or professional consultation. Users should seek qualified support when making important decisions.</p>
+      <h2 id="section5Title"></h2>
+      <ul id="section5List"></ul>
     </section>
 
     <section>
-      <h2>User Responsibilities</h2>
-      <ul>
-        <li>You are responsible for maintaining the security of your device and account credentials.</li>
-        <li>You must not misuse the app, attempt to bypass protections, upload unlawful content, or use the service in a way that infringes the rights of others.</li>
-        <li>You must not reproduce or redistribute protected app content for unauthorized commercial purposes.</li>
-      </ul>
+      <h2 id="section6Title"></h2>
+      <ul id="section6List"></ul>
     </section>
 
-    <section>
-      <h2>Subscriptions and Billing</h2>
-      <p>Premium subscriptions and digital services may be offered through Apple App Store infrastructure. Billing, renewal, cancellation, and refund processes are governed by Apple’s rules and applicable law. You can manage or cancel subscriptions in your Apple account settings.</p>
-    </section>
-
-    <section>
-      <h2>Service Changes</h2>
-      <p>We may modify, improve, suspend, or discontinue parts of the app for technical, legal, security, or product reasons. We may also restrict access where required to prevent abuse or comply with applicable obligations.</p>
-    </section>
-
-    <section>
-      <h2>Limitation</h2>
-      <p>To the extent permitted by law, the app is provided on an as-available basis. We do not guarantee uninterrupted availability of every feature on every device or at every time.</p>
-    </section>
-
-    <section>
-      <h2>Contact</h2>
-      <p>For support questions, contact <a href="mailto:support@zikrim.app">support@zikrim.app</a>.</p>
-    </section>
+    <footer id="footer"></footer>
   </main>
+
+  <script>
+    const supportEmail = "sabahattinaliyucel@melsalegal.com";
+    const translations = {
+      tr: {
+        label: "Turkce",
+        title: "Kullanim Sartlari",
+        intro: "Bu sayfa Zikrim uygulamasinin kullanimina, premium ozelliklerine, manevi icerik sinirlarina ve kullanicinin sorumluluklarina iliskin temel sartlari aciklar.",
+        updated: "Son guncelleme: 17 Mart 2026",
+        languageLabel: "Dil",
+        notice: "Yapay zeka destekli yanitlar, dini veya profesyonel acidan baglayici karar metni degildir. Uygulama manevi destek saglar; nihai karar sorumlulugu kullanicidadir.",
+        s1t: "Kabul ve Kapsam",
+        s1: [
+          "Uygulamayi indirmeniz, hesap acmaniz, misafir olarak kullanmaniz veya premium satin almaniz bu kosullari kabul ettiginiz anlamina gelir.",
+          "Bu kosullar, dua, zikir, tesbihat, kivle, namaz vakitleri, bildirimler, bulut yedekleme, premium ve yapay zeka destekli alanlar dahil uygulama icindeki tum dijital hizmetleri kapsar."
+        ],
+        s2t: "Abonelik ve Dijital Hizmetler",
+        s2: [
+          "Premium abonelikler Apple App Store altyapisi uzerinden sunulabilir.",
+          "Fiyat, yenileme, faturalandirma, iptal ve iade surecleri App Store kurallari ve uygulanabilir tuketici hukuku kapsaminda degerlendirilir.",
+          "Kullanici aboneligini Apple hesap ayarlarindan yonetebilir veya iptal edebilir."
+        ],
+        s3t: "Icerik ve AI Uyarisi",
+        s3: [
+          "Uygulamadaki metinler, ozetler ve yapay zeka destekli yanitlar genel bilgilendirme amaclidir.",
+          "Bu icerikler baglayici dini gorus, fetva, tibbi tavsiye, hukuki tavsiye, psikolojik destek veya kriz yardimi yerine gecmez.",
+          "Onemli dini, hukuki, tibbi, psikolojik veya mali kararlar icin kullanici ayrica yetkin kisilere basvurmalidir."
+        ],
+        s4t: "Kullanici Yukumlulukleri",
+        s4: [
+          "Kullanici uygulamayi hukuka, kamu duzenine ve genel ahlaka uygun sekilde kullanmakla yukumludur.",
+          "Hesap guvenligi, cihaz erisimi ve giris bilgilerinin korunmasi kullanicinin sorumlulugundadir.",
+          "Sistemi kotuye kullanma, guvenlik engellerini asma, izinsiz veri cekme, hak ihlali olusturan kullanim ve izinsiz ticari cogaltma yasaktir."
+        ],
+        s5t: "Hizmet Degisiklikleri ve Sorumlulugun Siniri",
+        s5: [
+          "Guvenlik, teknik gereklilik, mevzuat, operasyon veya urun gelistirme sebepleriyle uygulamanin bazi bolumleri degistirilebilir, sinirlandirilabilir veya kaldirilabilir.",
+          "Uygulama mumkun oldugunca surekli sunulsa da her ozelligin her zaman ve her cihazda kesintisiz calisacagi garanti edilmez.",
+          "Yasal olarak izin verilen azami olcude hizmet mevcut haliyle sunulur."
+        ],
+        s6t: "Iletisim ve Destek",
+        s6: [
+          "Uyusmazlik, destek veya yasal talepler icin " + supportEmail + " adresi kullanilabilir.",
+          "Mesajinizda ilgili hesap e-postasini ve talep konusunu yazmaniz sureci hizlandirir.",
+          "Kullanici haklari saklidir; uygulama tarafindan sunulan dijital hizmetler App Store ve uygulanabilir hukukla birlikte degerlendirilir."
+        ],
+        footer: "Bu sayfa App Store incelemesi ve kullanici bilgilendirmesi icin kamuya acik olarak yayinlanmaktadir."
+      },
+      en: {
+        label: "English",
+        title: "Terms of Use",
+        intro: "This page explains the main terms governing the use of the Zikrim app, including premium features, limits of spiritual and AI-assisted content, and user responsibilities.",
+        updated: "Last updated: March 17, 2026",
+        languageLabel: "Language",
+        notice: "AI-assisted answers are not binding religious or professional determinations. The app may support spiritual reflection, but final decisions remain the user’s responsibility.",
+        s1t: "Acceptance and Scope",
+        s1: [
+          "Downloading the app, creating an account, using it as a guest, or purchasing premium access means that you accept these terms.",
+          "These terms apply to all digital services within the app, including dua, dhikr, tasbihat, qibla, prayer times, notifications, cloud backup, premium access, and AI-assisted areas."
+        ],
+        s2t: "Subscriptions and Digital Services",
+        s2: [
+          "Premium subscriptions may be offered through Apple App Store infrastructure.",
+          "Pricing, renewal, billing, cancellation, and refund processes are governed by App Store rules together with applicable consumer law.",
+          "Users can manage or cancel subscriptions through Apple account settings."
+        ],
+        s3t: "Content and AI Notice",
+        s3: [
+          "Texts, summaries, and AI-assisted responses in the app are provided for general informational use.",
+          "They do not replace binding religious guidance, fatwas, legal advice, medical advice, mental health support, or crisis assistance.",
+          "Users should seek qualified advice for important religious, legal, medical, psychological, or financial decisions."
+        ],
+        s4t: "User Responsibilities",
+        s4: [
+          "Users must use the app in compliance with law, public order, and the intended purpose of the service.",
+          "Account safety, device access, and credential protection remain the user’s responsibility.",
+          "Misuse of the system, attempts to bypass protections, unauthorized scraping, rights-infringing behavior, and unauthorized commercial redistribution are prohibited."
+        ],
+        s5t: "Service Changes and Limitation",
+        s5: [
+          "For security, technical, legal, operational, or product reasons, parts of the app may be changed, restricted, or discontinued.",
+          "Although the service is intended to be reliably available, uninterrupted operation of every feature on every device cannot be guaranteed.",
+          "To the maximum extent permitted by law, the service is provided on an as-available basis."
+        ],
+        s6t: "Contact and Support",
+        s6: [
+          "For disputes, support, or legal requests, contact " + supportEmail + ".",
+          "Including the relevant account email and request topic may help us respond faster.",
+          "User rights remain reserved; digital services offered through the app are interpreted together with App Store rules and applicable law."
+        ],
+        footer: "This page is published publicly for App Store review and user information purposes."
+      }
+    };
+
+    // For non-English languages we provide equivalent localized summaries while keeping
+    // the English structure aligned across sections.
+    const fallbackMap = {
+      de: {
+        label: "Deutsch",
+        title: "Nutzungsbedingungen",
+        intro: "Diese Seite erklaert die wichtigsten Bedingungen fur die Nutzung von Zikrim, einschliesslich Premium-Funktionen, Grenzen spiritueller und KI-gestutzter Inhalte sowie Nutzerpflichten.",
+        updated: "Letzte Aktualisierung: 17. Marz 2026",
+        languageLabel: "Sprache",
+        notice: "KI-gestutzte Antworten sind keine verbindlichen religioesen oder professionellen Entscheidungen. Die App kann spirituelle Reflexion unterstutzen, die Verantwortung fur Entscheidungen bleibt jedoch beim Nutzer.",
+        s1t: "Annahme und Geltungsbereich",
+        s1: [
+          "Durch Download, Kontoerstellung, Gastnutzung oder Premium-Kauf akzeptieren Sie diese Bedingungen.",
+          "Diese Bedingungen gelten fur alle digitalen Dienste innerhalb der App, einschliesslich Dua, Dhikr, Tasbihat, Qibla, Gebetszeiten, Benachrichtigungen, Cloud-Backup, Premium und KI-Bereiche."
+        ],
+        s2t: "Abonnements und digitale Dienste",
+        s2: [
+          "Premium-Abonnements konnen ueber Apple App Store angeboten werden.",
+          "Preis, Verlaengerung, Abrechnung, Kuendigung und Erstattung richten sich nach App-Store-Regeln und anwendbarem Verbraucherrecht.",
+          "Abonnements konnen in den Apple-Kontoeinstellungen verwaltet oder gekuendigt werden."
+        ],
+        s3t: "Hinweis zu Inhalten und KI",
+        s3: [
+          "Texte, Zusammenfassungen und KI-gestutzte Antworten dienen allgemeinen Informationszwecken.",
+          "Sie ersetzen keine verbindliche religioese Orientierung, Rechtsberatung, medizinische Beratung, psychologische Unterstuetzung oder Krisenhilfe.",
+          "Bei wichtigen religioesen, rechtlichen, medizinischen, psychologischen oder finanziellen Entscheidungen sollte qualifizierter Rat eingeholt werden."
+        ],
+        s4t: "Pflichten der Nutzer",
+        s4: [
+          "Die App ist im Einklang mit Gesetz, oeffentlicher Ordnung und dem vorgesehenen Zweck zu nutzen.",
+          "Kontosicherheit, Geraetezugang und Schutz der Zugangsdaten liegen in der Verantwortung des Nutzers.",
+          "Missbrauch, Umgehung von Schutzmassnahmen, unbefugtes Datensammeln, rechtsverletzendes Verhalten und unerlaubte kommerzielle Weitergabe sind untersagt."
+        ],
+        s5t: "Aenderungen des Dienstes und Haftungsgrenze",
+        s5: [
+          "Aus Sicherheits-, Technik-, Rechts-, Betriebs- oder Produktgruenden konnen Teile der App geaendert, eingeschraenkt oder eingestellt werden.",
+          "Ein stoerungsfreier Betrieb jeder Funktion auf jedem Geraet kann nicht garantiert werden.",
+          "Soweit gesetzlich zulaessig, wird der Dienst auf Basis der Verfuegbarkeit bereitgestellt."
+        ],
+        s6t: "Kontakt und Support",
+        s6: [
+          "Fur Streitigkeiten, Support oder rechtliche Anfragen kontaktieren Sie " + supportEmail + ".",
+          "Die Angabe der Konto-E-Mail und des Anliegens kann die Bearbeitung beschleunigen.",
+          "Nutzerrechte bleiben vorbehalten; die digitalen Dienste sind zusammen mit App-Store-Regeln und anwendbarem Recht zu beurteilen."
+        ],
+        footer: "Diese Seite ist oeffentlich fuer App-Store-Prufung und Nutzerinformation verfugbar."
+      },
+      es: {
+        label: "Espanol",
+        title: "Terminos de Uso",
+        intro: "Esta pagina explica las condiciones principales para usar Zikrim, incluidas las funciones premium, los limites del contenido espiritual y asistido por IA, y las responsabilidades del usuario.",
+        updated: "Ultima actualizacion: 17 de marzo de 2026",
+        languageLabel: "Idioma",
+        notice: "Las respuestas asistidas por IA no constituyen determinaciones religiosas ni profesionales vinculantes. La app puede apoyar la reflexion espiritual, pero la decision final sigue siendo responsabilidad del usuario.",
+        s1t: "Aceptacion y alcance",
+        s1: [
+          "Descargar la app, crear una cuenta, usarla como invitado o comprar premium implica aceptar estos terminos.",
+          "Estos terminos cubren todos los servicios digitales de la app, incluidos dua, dhikr, tasbihat, qibla, horarios de oracion, notificaciones, copia de seguridad en la nube, premium y areas con IA."
+        ],
+        s2t: "Suscripciones y servicios digitales",
+        s2: [
+          "Las suscripciones premium pueden ofrecerse a traves de Apple App Store.",
+          "El precio, la renovacion, la facturacion, la cancelacion y los reembolsos se rigen por las normas del App Store y la ley aplicable.",
+          "Las suscripciones pueden gestionarse o cancelarse desde la cuenta de Apple."
+        ],
+        s3t: "Aviso sobre contenido e IA",
+        s3: [
+          "Los textos, resumenes y respuestas asistidas por IA tienen fines informativos generales.",
+          "No sustituyen orientacion religiosa vinculante, asesoramiento legal, medico, apoyo psicologico o asistencia en crisis.",
+          "Para decisiones importantes de caracter religioso, legal, medico, psicologico o financiero, debe buscarse asesoramiento cualificado."
+        ],
+        s4t: "Responsabilidades del usuario",
+        s4: [
+          "La app debe usarse conforme a la ley, al orden publico y a la finalidad prevista del servicio.",
+          "La seguridad de la cuenta, el acceso al dispositivo y la proteccion de credenciales son responsabilidad del usuario.",
+          "Se prohibe el uso indebido, intentar eludir protecciones, extraer datos sin autorizacion, infringir derechos ajenos y redistribuir contenido comercialmente sin permiso."
+        ],
+        s5t: "Cambios del servicio y limitacion",
+        s5: [
+          "Por razones de seguridad, tecnicas, legales, operativas o de producto, partes de la app pueden cambiarse, restringirse o retirarse.",
+          "No puede garantizarse el funcionamiento ininterrumpido de cada funcion en todos los dispositivos.",
+          "En la medida maxima permitida por la ley, el servicio se ofrece segun disponibilidad."
+        ],
+        s6t: "Contacto y soporte",
+        s6: [
+          "Para disputas, soporte o solicitudes legales, contacta con " + supportEmail + ".",
+          "Incluir el correo de la cuenta y el tema de la solicitud puede acelerar la respuesta.",
+          "Los derechos del usuario se mantienen; los servicios digitales deben interpretarse junto con las reglas del App Store y la ley aplicable."
+        ],
+        footer: "Esta pagina se publica abiertamente para revision de App Store e informacion al usuario."
+      },
+      fr: {
+        label: "Francais",
+        title: "Conditions d'Utilisation",
+        intro: "Cette page explique les principales conditions d'utilisation de Zikrim, y compris les fonctions premium, les limites du contenu spirituel et assiste par IA, ainsi que les responsabilites de l'utilisateur.",
+        updated: "Derniere mise a jour : 17 mars 2026",
+        languageLabel: "Langue",
+        notice: "Les reponses assistees par IA ne constituent pas des decisions religieuses ou professionnelles contraignantes. L'application peut soutenir la reflexion spirituelle, mais la decision finale reste celle de l'utilisateur.",
+        s1t: "Acceptation et champ d'application",
+        s1: [
+          "Le telechargement de l'application, la creation d'un compte, l'utilisation en mode invite ou l'achat d'un abonnement premium implique l'acceptation des presentes conditions.",
+          "Ces conditions couvrent tous les services numeriques de l'application, y compris dua, dhikr, tasbihat, qibla, horaires de priere, notifications, sauvegarde cloud, premium et fonctions IA."
+        ],
+        s2t: "Abonnements et services numeriques",
+        s2: [
+          "Les abonnements premium peuvent etre proposes via Apple App Store.",
+          "Le prix, le renouvellement, la facturation, l'annulation et les remboursements relevent des regles de l'App Store et du droit applicable.",
+          "Les abonnements peuvent etre geres ou annules dans les reglages du compte Apple."
+        ],
+        s3t: "Avertissement sur le contenu et l'IA",
+        s3: [
+          "Les textes, resumes et reponses assistees par IA ont un but general d'information.",
+          "Ils ne remplacent pas une orientation religieuse contraignante, un avis juridique, medical, psychologique ou une aide de crise.",
+          "Pour des decisions importantes religieuses, juridiques, medicales, psychologiques ou financieres, il convient de consulter des personnes qualifiees."
+        ],
+        s4t: "Responsabilites de l'utilisateur",
+        s4: [
+          "L'application doit etre utilisee conformement a la loi, a l'ordre public et a l'objet du service.",
+          "La securite du compte, l'acces a l'appareil et la protection des identifiants relevent de l'utilisateur.",
+          "L'abus du systeme, la tentative de contournement des protections, la collecte non autorisee de donnees, les atteintes aux droits d'autrui et la redistribution commerciale sans autorisation sont interdits."
+        ],
+        s5t: "Modifications du service et limitation",
+        s5: [
+          "Pour des raisons de securite, techniques, juridiques, operationnelles ou produit, certaines parties de l'application peuvent etre modifiees, limitees ou supprimees.",
+          "Le fonctionnement ininterrompu de chaque fonction sur chaque appareil ne peut etre garanti.",
+          "Dans la mesure maximale autorisee par la loi, le service est fourni selon sa disponibilite."
+        ],
+        s6t: "Contact et assistance",
+        s6: [
+          "Pour les litiges, l'assistance ou les demandes juridiques, contactez " + supportEmail + ".",
+          "Indiquer l'e-mail du compte et l'objet de la demande peut accelerer la reponse.",
+          "Les droits de l'utilisateur demeurent reserves ; les services numeriques sont interpretes avec les regles de l'App Store et le droit applicable."
+        ],
+        footer: "Cette page est publiee publiquement pour l'examen App Store et l'information utilisateur."
+      },
+      id: {
+        label: "Bahasa Indonesia",
+        title: "Syarat Penggunaan",
+        intro: "Halaman ini menjelaskan syarat utama penggunaan Zikrim, termasuk fitur premium, batasan konten spiritual dan berbantuan AI, serta tanggung jawab pengguna.",
+        updated: "Pembaruan terakhir: 17 Maret 2026",
+        languageLabel: "Bahasa",
+        notice: "Jawaban berbantuan AI bukan penetapan agama atau profesional yang mengikat. Aplikasi dapat mendukung refleksi spiritual, tetapi keputusan akhir tetap berada pada pengguna.",
+        s1t: "Penerimaan dan Cakupan",
+        s1: [
+          "Mengunduh aplikasi, membuat akun, menggunakan sebagai tamu, atau membeli premium berarti Anda menerima syarat ini.",
+          "Syarat ini berlaku untuk semua layanan digital di dalam aplikasi, termasuk doa, dzikir, tasbihat, kiblat, waktu salat, notifikasi, cadangan cloud, premium, dan area berbantuan AI."
+        ],
+        s2t: "Langganan dan Layanan Digital",
+        s2: [
+          "Langganan premium dapat ditawarkan melalui Apple App Store.",
+          "Harga, perpanjangan, penagihan, pembatalan, dan pengembalian dana tunduk pada aturan App Store dan hukum yang berlaku.",
+          "Langganan dapat dikelola atau dibatalkan dari pengaturan akun Apple."
+        ],
+        s3t: "Pemberitahuan Konten dan AI",
+        s3: [
+          "Teks, ringkasan, dan jawaban berbantuan AI disediakan untuk tujuan informasi umum.",
+          "Konten tersebut tidak menggantikan panduan agama yang mengikat, nasihat hukum, medis, psikologis, atau bantuan krisis.",
+          "Untuk keputusan penting terkait agama, hukum, medis, psikologis, atau keuangan, pengguna sebaiknya mencari nasihat yang memenuhi syarat."
+        ],
+        s4t: "Tanggung Jawab Pengguna",
+        s4: [
+          "Aplikasi harus digunakan sesuai hukum, ketertiban umum, dan tujuan layanan.",
+          "Keamanan akun, akses perangkat, dan perlindungan kredensial tetap menjadi tanggung jawab pengguna.",
+          "Penyalahgunaan sistem, upaya melewati perlindungan, pengambilan data tanpa izin, pelanggaran hak pihak lain, dan redistribusi komersial tanpa izin dilarang."
+        ],
+        s5t: "Perubahan Layanan dan Batasan",
+        s5: [
+          "Karena alasan keamanan, teknis, hukum, operasional, atau produk, bagian aplikasi dapat diubah, dibatasi, atau dihentikan.",
+          "Operasi tanpa gangguan untuk setiap fitur di setiap perangkat tidak dapat dijamin.",
+          "Sejauh diizinkan oleh hukum, layanan disediakan sebagaimana tersedia."
+        ],
+        s6t: "Kontak dan Dukungan",
+        s6: [
+          "Untuk sengketa, dukungan, atau permintaan hukum, hubungi " + supportEmail + ".",
+          "Mencantumkan email akun dan topik permintaan dapat mempercepat respons.",
+          "Hak pengguna tetap berlaku; layanan digital ditafsirkan bersama aturan App Store dan hukum yang berlaku."
+        ],
+        footer: "Halaman ini dipublikasikan secara terbuka untuk peninjauan App Store dan informasi pengguna."
+      },
+      ms: {
+        label: "Bahasa Melayu",
+        title: "Terma Penggunaan",
+        intro: "Halaman ini menerangkan syarat utama penggunaan Zikrim, termasuk ciri premium, had kandungan rohani dan dibantu AI, serta tanggungjawab pengguna.",
+        updated: "Kemas kini terakhir: 17 Mac 2026",
+        languageLabel: "Bahasa",
+        notice: "Jawapan berasaskan AI bukan keputusan agama atau profesional yang mengikat. Aplikasi boleh menyokong refleksi rohani, tetapi keputusan akhir kekal tanggungjawab pengguna.",
+        s1t: "Penerimaan dan Skop",
+        s1: [
+          "Memuat turun aplikasi, membuka akaun, menggunakannya sebagai tetamu, atau membeli premium bermaksud anda menerima terma ini.",
+          "Terma ini terpakai kepada semua perkhidmatan digital dalam aplikasi, termasuk doa, zikir, tasbihat, kiblat, waktu solat, pemberitahuan, sandaran awan, premium, dan ruang AI."
+        ],
+        s2t: "Langganan dan Perkhidmatan Digital",
+        s2: [
+          "Langganan premium boleh ditawarkan melalui Apple App Store.",
+          "Harga, pembaharuan, pengebilan, pembatalan, dan bayaran balik tertakluk kepada peraturan App Store serta undang-undang yang berkenaan.",
+          "Langganan boleh diurus atau dibatalkan melalui tetapan akaun Apple."
+        ],
+        s3t: "Notis Kandungan dan AI",
+        s3: [
+          "Teks, ringkasan, dan jawapan berasaskan AI disediakan untuk tujuan maklumat umum.",
+          "Ia tidak menggantikan panduan agama yang mengikat, nasihat undang-undang, perubatan, psikologi, atau bantuan krisis.",
+          "Bagi keputusan penting berkaitan agama, undang-undang, perubatan, psikologi, atau kewangan, pengguna wajar mendapatkan nasihat yang berkelayakan."
+        ],
+        s4t: "Tanggungjawab Pengguna",
+        s4: [
+          "Aplikasi mesti digunakan selaras dengan undang-undang, ketenteraman awam, dan tujuan perkhidmatan.",
+          "Keselamatan akaun, akses peranti, dan perlindungan kelayakan kekal tanggungjawab pengguna.",
+          "Penyalahgunaan sistem, cubaan memintas perlindungan, pengambilan data tanpa kebenaran, pelanggaran hak pihak lain, dan pengedaran semula komersial tanpa izin adalah dilarang."
+        ],
+        s5t: "Perubahan Perkhidmatan dan Had",
+        s5: [
+          "Atas sebab keselamatan, teknikal, undang-undang, operasi, atau produk, bahagian aplikasi boleh diubah, dihadkan, atau dihentikan.",
+          "Operasi tanpa gangguan bagi setiap ciri pada setiap peranti tidak dapat dijamin.",
+          "Setakat yang dibenarkan oleh undang-undang, perkhidmatan disediakan berdasarkan ketersediaan."
+        ],
+        s6t: "Hubungan dan Sokongan",
+        s6: [
+          "Untuk pertikaian, sokongan, atau permintaan undang-undang, hubungi " + supportEmail + ".",
+          "Menyertakan e-mel akaun dan topik permintaan boleh mempercepatkan respons.",
+          "Hak pengguna kekal terpelihara; perkhidmatan digital ditafsir bersama peraturan App Store dan undang-undang yang berkenaan."
+        ],
+        footer: "Halaman ini diterbitkan secara terbuka untuk semakan App Store dan maklumat pengguna."
+      },
+      ar: {
+        label: "العربية",
+        title: "شروط الاستخدام",
+        intro: "توضح هذه الصفحة الشروط الأساسية لاستخدام تطبيق زكريم، بما في ذلك ميزات الاشتراك والحدود المتعلقة بالمحتوى الروحي والمحتوى المدعوم بالذكاء الاصطناعي ومسؤوليات المستخدم.",
+        updated: "آخر تحديث: 17 مارس 2026",
+        languageLabel: "اللغة",
+        notice: "الإجابات المدعومة بالذكاء الاصطناعي ليست قرارات دينية أو مهنية ملزمة. قد يدعم التطبيق التأمل الروحي، لكن القرار النهائي يبقى مسؤولية المستخدم.",
+        s1t: "القبول والنطاق",
+        s1: [
+          "تنزيل التطبيق أو إنشاء حساب أو استخدامه كضيف أو شراء اشتراك مدفوع يعني قبول هذه الشروط.",
+          "تنطبق هذه الشروط على جميع الخدمات الرقمية داخل التطبيق، بما في ذلك الدعاء والذكر والتسبيحات والقبلة ومواقيت الصلاة والإشعارات والنسخ السحابي والمزايا المدفوعة وأقسام الذكاء الاصطناعي."
+        ],
+        s2t: "الاشتراكات والخدمات الرقمية",
+        s2: [
+          "قد يتم تقديم الاشتراكات المدفوعة عبر Apple App Store.",
+          "يخضع السعر والتجديد والفوترة والإلغاء والاسترداد لقواعد App Store والقانون المعمول به.",
+          "يمكن إدارة الاشتراكات أو إلغاؤها من إعدادات حساب Apple."
+        ],
+        s3t: "تنبيه بشأن المحتوى والذكاء الاصطناعي",
+        s3: [
+          "النصوص والملخصات والإجابات المدعومة بالذكاء الاصطناعي مقدمة لأغراض معلوماتية عامة.",
+          "وهي لا تحل محل التوجيه الديني الملزم أو الاستشارة القانونية أو الطبية أو النفسية أو دعم الأزمات.",
+          "في القرارات المهمة الدينية أو القانونية أو الطبية أو النفسية أو المالية، يجب الرجوع إلى جهات مؤهلة."
+        ],
+        s4t: "مسؤوليات المستخدم",
+        s4: [
+          "يجب استخدام التطبيق وفقا للقانون والنظام العام والغرض المقصود من الخدمة.",
+          "تبقى سلامة الحساب والوصول إلى الجهاز وحماية بيانات الدخول من مسؤولية المستخدم.",
+          "يحظر إساءة استخدام النظام أو محاولة تجاوز وسائل الحماية أو جمع البيانات دون إذن أو انتهاك حقوق الآخرين أو إعادة التوزيع التجاري غير المصرح به."
+        ],
+        s5t: "تغييرات الخدمة وحدود المسؤولية",
+        s5: [
+          "لأسباب أمنية أو تقنية أو قانونية أو تشغيلية أو متعلقة بالمنتج، قد يتم تعديل أجزاء من التطبيق أو تقييدها أو إيقافها.",
+          "لا يمكن ضمان التشغيل المتواصل لكل ميزة على كل جهاز.",
+          "إلى أقصى حد يسمح به القانون، يتم تقديم الخدمة بحسب التوفر."
+        ],
+        s6t: "التواصل والدعم",
+        s6: [
+          "للنزاعات أو الدعم أو الطلبات القانونية، تواصل عبر " + supportEmail + ".",
+          "قد يساعد تضمين بريد الحساب وموضوع الطلب في تسريع الرد.",
+          "تظل حقوق المستخدم محفوظة، وتفسر الخدمات الرقمية مع قواعد App Store والقانون المعمول به."
+        ],
+        footer: "تم نشر هذه الصفحة علنا لأغراض مراجعة App Store وإعلام المستخدم."
+      },
+      ur: {
+        label: "اردو",
+        title: "استعمال کی شرائط",
+        intro: "یہ صفحہ Zikrim کے استعمال کی بنیادی شرائط، پریمیم فیچرز، روحانی اور AI معاون مواد کی حدود، اور صارف کی ذمہ داریوں کو واضح کرتا ہے۔",
+        updated: "آخری اپ ڈیٹ: 17 مارچ 2026",
+        languageLabel: "زبان",
+        notice: "AI سے مدد یافتہ جوابات دینی یا پیشہ ورانہ طور پر پابند فیصلے نہیں ہیں۔ ایپ روحانی غور و فکر میں مدد دے سکتی ہے، مگر حتمی فیصلہ صارف کی ذمہ داری ہے.",
+        s1t: "قبولیت اور دائرہ کار",
+        s1: [
+          "ایپ ڈاؤن لوڈ کرنا، اکاؤنٹ بنانا، مہمان کے طور پر استعمال کرنا، یا پریمیم خریدنا ان شرائط کی قبولیت ہے۔",
+          "یہ شرائط ایپ کی تمام ڈیجیٹل سروسز پر لاگو ہوتی ہیں، بشمول دعا، ذکر، تسبیحات، قبلہ، نماز کے اوقات، نوٹیفکیشنز، کلاؤڈ بیک اپ، پریمیم، اور AI حصے۔"
+        ],
+        s2t: "سبسکرپشنز اور ڈیجیٹل سروسز",
+        s2: [
+          "پریمیم سبسکرپشنز Apple App Store کے ذریعے پیش کی جا سکتی ہیں۔",
+          "قیمت، تجدید، بلنگ، منسوخی، اور ریفنڈ App Store قواعد اور قابل اطلاق قانون کے تابع ہیں۔",
+          "سبسکرپشنز Apple اکاؤنٹ سیٹنگز سے manage یا cancel کی جا سکتی ہیں۔"
+        ],
+        s3t: "مواد اور AI سے متعلق نوٹس",
+        s3: [
+          "متن، خلاصے، اور AI معاون جوابات عمومی معلوماتی مقصد کے لیے فراہم کیے جاتے ہیں۔",
+          "یہ لازمی دینی رہنمائی، قانونی مشورہ، طبی مشورہ، نفسیاتی مدد، یا بحران کی امداد کا متبادل نہیں ہیں۔",
+          "اہم دینی، قانونی، طبی، نفسیاتی، یا مالی فیصلوں کے لیے اہل ماہرین سے مشورہ لینا چاہیے۔"
+        ],
+        s4t: "صارف کی ذمہ داریاں",
+        s4: [
+          "ایپ کو قانون، عوامی نظم، اور سروس کے مقصد کے مطابق استعمال کرنا ہوگا۔",
+          "اکاؤنٹ کی حفاظت، ڈیوائس تک رسائی، اور credentials کی حفاظت صارف کی ذمہ داری ہے۔",
+          "سسٹم کا غلط استعمال، سیکیورٹی سے بچنے کی کوشش، غیر مجاز ڈیٹا حاصل کرنا، دوسروں کے حقوق کی خلاف ورزی، اور غیر مجاز تجارتی دوبارہ تقسیم ممنوع ہے۔"
+        ],
+        s5t: "سروس میں تبدیلیاں اور حد ذمہ داری",
+        s5: [
+          "سیکیورٹی، تکنیکی، قانونی، عملیاتی، یا پروڈکٹ وجوہات کی بنا پر ایپ کے بعض حصے تبدیل، محدود، یا بند کیے جا سکتے ہیں۔",
+          "ہر فیچر کی ہر ڈیوائس پر بلا تعطل دستیابی کی ضمانت نہیں دی جا سکتی۔",
+          "قانون کی اجازت کی زیادہ سے زیادہ حد تک سروس دستیابی کی بنیاد پر فراہم کی جاتی ہے۔"
+        ],
+        s6t: "رابطہ اور سپورٹ",
+        s6: [
+          "تنازع، سپورٹ، یا قانونی درخواستوں کے لیے " + supportEmail + " پر رابطہ کریں۔",
+          "اکاؤنٹ ای میل اور درخواست کا موضوع شامل کرنے سے جواب تیز ہو سکتا ہے۔",
+          "صارف کے حقوق محفوظ رہتے ہیں؛ ڈیجیٹل سروسز کو App Store قواعد اور قابل اطلاق قانون کے ساتھ پڑھا جائے گا۔"
+        ],
+        footer: "یہ صفحہ App Store review اور صارفی معلومات کے لیے عوامی طور پر شائع کیا گیا ہے۔"
+      }
+    };
+
+    const translationsAll = { ...translations, ...fallbackMap };
+    const sectionMap = [
+      ["section1Title", "section1List", "s1t", "s1"],
+      ["section2Title", "section2List", "s2t", "s2"],
+      ["section3Title", "section3List", "s3t", "s3"],
+      ["section4Title", "section4List", "s4t", "s4"],
+      ["section5Title", "section5List", "s5t", "s5"],
+      ["section6Title", "section6List", "s6t", "s6"]
+    ];
+
+    const select = document.getElementById("languageSelect");
+    Object.entries(translationsAll).forEach(([code, content]) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = content.label;
+      select.appendChild(option);
+    });
+
+    const initial = (translationsAll[(navigator.language || "en").slice(0, 2).toLowerCase()] ? (navigator.language || "en").slice(0, 2).toLowerCase() : "en");
+
+    const render = (code) => {
+      const content = translationsAll[code] || translationsAll.en;
+      document.documentElement.lang = code;
+      document.getElementById("title").textContent = content.title;
+      document.getElementById("intro").textContent = content.intro;
+      document.getElementById("updated").textContent = content.updated;
+      document.getElementById("email").textContent = supportEmail;
+      document.getElementById("languageLabel").textContent = content.languageLabel;
+      document.getElementById("notice").textContent = content.notice;
+      document.getElementById("footer").textContent = content.footer;
+
+      sectionMap.forEach(([titleId, listId, titleKey, itemsKey]) => {
+        document.getElementById(titleId).textContent = content[titleKey];
+        const list = document.getElementById(listId);
+        list.innerHTML = "";
+        content[itemsKey].forEach((item) => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          list.appendChild(li);
+        });
+      });
+    };
+
+    select.value = initial;
+    render(initial);
+    select.addEventListener("change", (event) => render(event.target.value));
+  </script>
 </body>
 </html>
