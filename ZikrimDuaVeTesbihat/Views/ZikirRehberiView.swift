@@ -1,6 +1,13 @@
 import SwiftUI
 import UIKit
 
+private enum GuideSearchUIState {
+    case idle
+    case loading
+    case success
+    case error
+}
+
 extension RehberCategory {
     var color: Color {
         switch self {
@@ -32,7 +39,10 @@ extension MoodFilter {
 }
 
 struct ZikirRehberiView: View {
+    @EnvironmentObject private var themeManager: ThemeManager
+    @Environment(\.colorScheme) private var systemColorScheme
     let storage: StorageService
+    let authService: AuthService
     let onStartCounter: () -> Void
 
     @State private var selectedCategory: RehberCategory = .gunlukRutinler
@@ -40,15 +50,20 @@ struct ZikirRehberiView: View {
     @State private var searchText: String = ""
     @State private var selectedEntry: RehberEntry? = nil
     @State private var showAddCustom: Bool = false
-    @State private var isPremium: Bool = false
     @State private var showKhutbah: Bool = false
+    @State private var showDiyanetSources: Bool = false
     @State private var geminiService = GroqService()
     @State private var searchTask: Task<Void, Never>? = nil
+    @State private var guideSearchState: GuideSearchUIState = .idle
+    @State private var lastSubmittedGuideQuery: String = ""
     @State private var spiritualQuestion: String = ""
     @State private var spiritualAnswer: String? = nil
     @State private var isAskingSpiritualQuestion: Bool = false
     @State private var showDailyLimitAlert: Bool = false
     @FocusState private var isSpiritualQuestionFocused: Bool
+    @FocusState private var isGuideSearchFieldFocused: Bool
+
+    private var isPremium: Bool { authService.isPremium }
 
     private var allGuideEntries: [RehberEntry] {
         ZikirRehberiData.entries + storage.customZikirs.map { item in
@@ -62,7 +77,7 @@ struct ZikirRehberiView: View {
                 recommendedCount: item.recommendedCount,
                 category: .kullanici,
                 notes: item.category,
-                schedule: "Kullanıcı ekledi"
+                schedule: L10n.string(.userAdded)
             )
         }
     }
@@ -72,12 +87,15 @@ struct ZikirRehberiView: View {
         return allGuideEntries.filter { ids.contains($0.id) }
     }
 
+    private var trimmedSearchText: String {
+        searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    }
+
     private var filteredEntries: [RehberEntry] {
         if let mood = selectedMood {
             let base = allGuideEntries.filter { $0.moodTags.contains(mood.rawValue) }
             guard !searchText.isEmpty else { return base }
-            let q = searchText.lowercased()
-            return base.filter { $0.title.lowercased().contains(q) || $0.transliteration.lowercased().contains(q) || $0.purpose.lowercased().contains(q) }
+            return base.filter { entryMatchesSearch($0, query: searchText) }
         }
 
         let base: [RehberEntry]
@@ -88,42 +106,38 @@ struct ZikirRehberiView: View {
         }
 
         guard !searchText.isEmpty else { return base }
-        let q = searchText.lowercased()
-        return base.filter {
-            $0.title.lowercased().contains(q)
-            || $0.transliteration.lowercased().contains(q)
-            || $0.purpose.lowercased().contains(q)
-            || ($0.schedule?.lowercased().contains(q) ?? false)
-        }
+        return base.filter { entryMatchesSearch($0, query: searchText) }
     }
 
     var body: some View {
+        let palette = themeManager.palette(using: systemColorScheme)
+
         NavigationStack {
             VStack(spacing: 0) {
                 categoryScroll
+                guideSearchBar
                 Divider()
                 entryList
             }
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle("Zikir ve Dua Rehberim")
-            .navigationBarTitleDisplayMode(.large)
-            .searchable(text: $searchText, prompt: "Zikir, dua veya duygu yaz…")
+            .background(palette.pageBackground)
+            .navigationTitle(L10n.string(.zikirVeDuaRehberim2))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(palette.secondaryBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(themeManager.resolvedIsDarkMode(using: systemColorScheme) ? .dark : .light, for: .navigationBar)
             .onChange(of: searchText) { _, newValue in
-                searchTask?.cancel()
-                geminiService.aiSearchResults = []
-                geminiService.assistantAdvice = nil
-                geminiService.searchError = nil
                 let trimmed = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard trimmed.count >= 2 else { return }
-                searchTask = Task {
-                    try? await Task.sleep(for: .milliseconds(800))
-                    guard !Task.isCancelled else { return }
-                    print("[ZikirRehberi] 🔍 AI arama başlıyor: \(trimmed)")
-                    await geminiService.maneviAssistantSearch(query: trimmed, entries: allGuideEntries)
+                if trimmed.isEmpty {
+                    resetGuideSearchState(clearSubmission: true)
+                } else if trimmed != lastSubmittedGuideQuery {
+                    resetGuideSearchState(clearSubmission: false)
                 }
             }
             .navigationDestination(isPresented: $showKhutbah) {
                 KhutbahView()
+            }
+            .navigationDestination(isPresented: $showDiyanetSources) {
+                DiyanetKnowledgeHubView()
             }
             .navigationDestination(for: RehberEntry.self) { entry in
                 ZikirRehberiDetailView(
@@ -131,9 +145,6 @@ struct ZikirRehberiView: View {
                     storage: storage,
                     onStartCounter: onStartCounter
                 )
-            }
-            .safeAreaInset(edge: .bottom) {
-                ConditionalBannerAd(isPremium: isPremium)
             }
             .sheet(isPresented: $showAddCustom) {
                 GuideCustomEntrySheet(storage: storage)
@@ -148,13 +159,53 @@ struct ZikirRehberiView: View {
                 }
             }
             .task {
-                do {
-                    let info = try await RevenueCatService.shared.customerInfo()
-                    isPremium = RevenueCatService.shared.hasActiveEntitlement(info)
-                    AdService.shared.updatePremiumStatus(isPremium)
-                } catch {}
+                await authService.refreshPremiumStatus()
             }
         }
+        .id(themeManager.navigationRefreshID)
+    }
+
+    private var guideSearchBar: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(themeManager.current.textSecondary)
+
+            TextField("", text: $searchText, prompt: Text(.guideSearchPlaceholder).foregroundStyle(themeManager.current.textSecondary))
+                .textInputAutocapitalization(.sentences)
+                .disableAutocorrection(false)
+                .submitLabel(.search)
+                .onSubmit {
+                    performSearch()
+                }
+                .focused($isGuideSearchFieldFocused)
+
+            if guideSearchState == .loading {
+                ProgressView()
+                    .controlSize(.small)
+                    .tint(themeManager.current.textSecondary)
+            }
+
+            if !trimmedSearchText.isEmpty {
+                Button {
+                    clearGuideSearch()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(themeManager.current.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(themeManager.current.elevatedBackground)
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(themeManager.current.border.opacity(0.65), lineWidth: 1)
+        )
+        .clipShape(.rect(cornerRadius: 14))
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(Color(.secondarySystemGroupedBackground))
     }
 
     private var categoryScroll: some View {
@@ -182,34 +233,33 @@ struct ZikirRehberiView: View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 if searchText.isEmpty && selectedMood == nil {
+                    officialSourcesSection
                     moodSection
-                    ForEach(filteredEntries) { entry in
-                        NavigationLink(value: entry) {
-                            RehberEntryCard(entry: entry, storage: storage)
+                    ForEach(Array(filteredEntries.enumerated()), id: \.element.id) { index, entry in
+                        RehberEntryRow(entry: entry, storage: storage, onDeleteCustom: deleteCustomEntry)
+
+                        if index == 4 && !isPremium {
+                            NativeAdCard()
                         }
-                        .buttonStyle(.plain)
                     }
                 } else if !searchText.isEmpty {
                     maneviAssistantCard
 
                     if !filteredEntries.isEmpty {
                         HStack {
-                            Text("ARAMA SONUÇLARI")
+                            Text(.aramaSonuclari)
                                 .font(.caption.bold())
                                 .foregroundStyle(.secondary)
                                 .tracking(0.6)
                             Spacer()
-                            Text("\(filteredEntries.count) sonuç")
+                            Text(L10n.format(.searchResultsCountFormat, filteredEntries.count))
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }
                         .padding(.top, 4)
 
                         ForEach(filteredEntries) { entry in
-                            NavigationLink(value: entry) {
-                                RehberEntryCard(entry: entry, storage: storage)
-                            }
-                            .buttonStyle(.plain)
+                            RehberEntryRow(entry: entry, storage: storage, onDeleteCustom: deleteCustomEntry)
                         }
                     }
                 } else if let mood = selectedMood {
@@ -220,7 +270,7 @@ struct ZikirRehberiView: View {
                             Image(systemName: "moon.stars")
                                 .font(.system(size: 36))
                                 .foregroundStyle(.tertiary)
-                            Text("Bu ruh hali için dua bulunamadı")
+                            Text(.buRuhHaliIcinDuaBulunamadi)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
@@ -228,18 +278,12 @@ struct ZikirRehberiView: View {
                         .padding(.top, 32)
                     } else {
                         ForEach(filteredEntries) { entry in
-                            NavigationLink(value: entry) {
-                                RehberEntryCard(entry: entry, storage: storage)
-                            }
-                            .buttonStyle(.plain)
+                            RehberEntryRow(entry: entry, storage: storage, onDeleteCustom: deleteCustomEntry)
                         }
                     }
                 } else {
                     ForEach(filteredEntries) { entry in
-                        NavigationLink(value: entry) {
-                            RehberEntryCard(entry: entry, storage: storage)
-                        }
-                        .buttonStyle(.plain)
+                        RehberEntryRow(entry: entry, storage: storage, onDeleteCustom: deleteCustomEntry)
                     }
                 }
             }
@@ -247,6 +291,12 @@ struct ZikirRehberiView: View {
             .padding(.top, 16)
             .padding(.bottom, 32)
         }
+    }
+
+    private func deleteCustomEntry(_ entry: RehberEntry) {
+        guard entry.category == .kullanici else { return }
+        guard storage.customZikirs.contains(where: { $0.id == entry.id }) else { return }
+        storage.deleteCustomZikir(id: entry.id)
     }
 
     private var maneviAssistantCard: some View {
@@ -268,31 +318,36 @@ struct ZikirRehberiView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("Manevi Asistan")
+                    Text(.islamiAsistan)
                         .font(.subheadline.bold())
                         .foregroundStyle(.primary)
-                    Text("\"\(searchText)\" için analiz ediliyor")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                    if guideSearchState == .loading {
+                        Text(.guideSearchLoading)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                 }
 
                 Spacer()
 
-                if geminiService.isSearching {
+                if guideSearchState == .loading {
                     ProgressView()
                         .scaleEffect(0.75)
                         .tint(.teal)
                 }
             }
 
-            if geminiService.isSearching {
+            if guideSearchState == .loading {
                 VStack(spacing: 8) {
+                    Text(.guideSearchLoading)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     ForEach(0..<3, id: \.self) { _ in
                         ShimmerPlaceholder()
                     }
                 }
-            } else if let advice = geminiService.assistantAdvice {
+            } else if guideSearchState == .success, let advice = geminiService.assistantAdvice {
                 HStack(alignment: .top, spacing: 10) {
                     Image(systemName: "quote.bubble.fill")
                         .font(.caption)
@@ -314,34 +369,31 @@ struct ZikirRehberiView: View {
 
                 if !aiMatchedEntries.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("ÖNERİLEN DUALALAR")
+                        Text(.onerilenDualalar)
                             .font(.caption.bold())
                             .foregroundStyle(.secondary)
                             .tracking(0.6)
 
                         ForEach(aiMatchedEntries) { entry in
-                            NavigationLink(value: entry) {
-                                RehberEntryCard(entry: entry, storage: storage)
-                            }
-                            .buttonStyle(.plain)
+                            RehberEntryRow(entry: entry, storage: storage, onDeleteCustom: deleteCustomEntry)
                         }
                     }
                 }
 
-                Text("Bu içerik Rabia tarafından hazırlanmıştır.")
+                Text(.buIcerikRabiaTarafindanHazirlanmistir)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
-            } else if let error = geminiService.searchError {
+            } else if guideSearchState == .error {
                 HStack(spacing: 8) {
                     Image(systemName: "wifi.exclamationmark")
                         .font(.caption)
                         .foregroundStyle(.orange)
-                    Text(error)
+                    Text(.guideSearchError)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-            } else if searchText.trimmingCharacters(in: .whitespacesAndNewlines).count < 3 {
-                Text("Arama yapmak için en az 3 karakter girin…")
+            } else if guideSearchState == .idle {
+                Text(.guideSearchHelperText)
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             }
@@ -355,13 +407,70 @@ struct ZikirRehberiView: View {
         )
     }
 
+    private func performSearch() {
+        let trimmed = trimmedSearchText
+        guard !trimmed.isEmpty else { return }
+        guard !(guideSearchState == .loading && trimmed == lastSubmittedGuideQuery) else { return }
+
+        isGuideSearchFieldFocused = false
+        searchTask?.cancel()
+        geminiService.aiSearchResults = []
+        geminiService.assistantAdvice = nil
+        geminiService.searchError = nil
+        guideSearchState = .loading
+        lastSubmittedGuideQuery = trimmed
+
+        searchTask = Task {
+            print("[ZikirRehberi] 🔍 AI arama başlıyor: \(trimmed)")
+            await geminiService.maneviAssistantSearch(query: trimmed, entries: allGuideEntries)
+            if Task.isCancelled { return }
+            await MainActor.run {
+                if geminiService.searchError != nil {
+                    guideSearchState = .error
+                } else {
+                    guideSearchState = .success
+                }
+            }
+        }
+    }
+
+    private func resetGuideSearchState(clearSubmission: Bool) {
+        searchTask?.cancel()
+        searchTask = nil
+        geminiService.aiSearchResults = []
+        geminiService.assistantAdvice = nil
+        geminiService.searchError = nil
+        guideSearchState = .idle
+
+        if clearSubmission {
+            lastSubmittedGuideQuery = ""
+        }
+    }
+
+    private func clearGuideSearch() {
+        isGuideSearchFieldFocused = false
+        searchText = ""
+        resetGuideSearchState(clearSubmission: true)
+    }
+
+    private func entryMatchesSearch(_ entry: RehberEntry, query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return true }
+
+        return entry.localizedTitle.localizedStandardContains(trimmed)
+            || entry.transliteration.localizedStandardContains(trimmed)
+            || entry.localizedPurpose.localizedStandardContains(trimmed)
+            || entry.arabicText.contains(trimmed)
+            || (entry.localizedSchedule?.localizedStandardContains(trimmed) ?? false)
+    }
+
     private var moodSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
                 Image(systemName: "heart.text.square.fill")
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
-                Text("HALİNİZE GÖRE DUA")
+                Text(.halinizeGoreDua)
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
                     .tracking(0.8)
@@ -405,19 +514,82 @@ struct ZikirRehberiView: View {
         .padding(.bottom, 4)
     }
 
+    private var officialSourcesSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: "building.columns.fill")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text("Resmi Kaynaklar")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                    .tracking(0.8)
+            }
+
+            Button {
+                showDiyanetSources = true
+            } label: {
+                HStack(spacing: 14) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.blue.opacity(0.78), Color.teal.opacity(0.64)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 50, height: 50)
+
+                        Image(systemName: "building.columns.fill")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Diyanet Kaynakları")
+                            .font(.subheadline.bold())
+                            .foregroundStyle(.primary)
+                        Text("Soru-cevap, karar ve mütalaa içeriklerini resmi kaynak atfıyla ayrı bir bilgi alanında sun.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.bold())
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(14)
+                .background(Color(.secondarySystemGroupedBackground))
+                .clipShape(.rect(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Color.blue.opacity(0.18), lineWidth: 1)
+                )
+            }
+            .buttonStyle(.plain)
+
+            khutbahBanner
+        }
+        .padding(.bottom, 4)
+    }
+
     private var maneviyataSorCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Image(systemName: "bubble.left.and.sparkles.fill")
                     .font(.subheadline)
                     .foregroundStyle(.teal)
-                Text("Maneviyata Sor")
+                Text(.islamiRehbereSor)
                     .font(.headline)
                 Spacer()
                 AIBadge()
             }
 
-            TextField("Dini sorunu yaz...", text: $spiritualQuestion, axis: .vertical)
+            TextField(.diniSorunuYaz, text: $spiritualQuestion, axis: .vertical)
                 .focused($isSpiritualQuestionFocused)
                 .submitLabel(.done)
                 .onSubmit {
@@ -435,10 +607,10 @@ struct ZikirRehberiView: View {
                     if isAskingSpiritualQuestion {
                         ProgressView()
                             .scaleEffect(0.8)
-                        Text("Rabia düşünüyor…")
+                        Text(.rabiaDusunuyor)
                             .font(.subheadline.bold())
                     } else {
-                        Text("Soruyu Gönder")
+                        Text(.soruyuGonder)
                             .font(.subheadline.bold())
                     }
                 }
@@ -462,7 +634,7 @@ struct ZikirRehberiView: View {
             }
 
             if !isPremium {
-                Text("Ücretsiz kullanıcılar için günde 1 soru hakkı vardır.")
+                Text(.ucretsizKullanicilarIcinGunde1SoruHakkiVardir)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -474,10 +646,10 @@ struct ZikirRehberiView: View {
             RoundedRectangle(cornerRadius: 16)
                 .strokeBorder(Color.teal.opacity(0.22), lineWidth: 1)
         )
-        .alert("Günlük soru hakkı doldu", isPresented: $showDailyLimitAlert) {
-            Button("Tamam", role: .cancel) {}
+        .alert(L10n.string(.gunlukSoruHakkiDoldu), isPresented: $showDailyLimitAlert) {
+            Button(.tamam2, role: .cancel) {}
         } message: {
-            Text("Premium ile sınırsız Maneviyata Sor kullanabilirsiniz.")
+            Text(.premiumIleSinirsizIslamiRehbereSorKullanabilirsiniz)
         }
     }
 
@@ -490,20 +662,19 @@ struct ZikirRehberiView: View {
 
         Task {
             if !isPremium {
-                if let info = try? await RevenueCatService.shared.customerInfo(), RevenueCatService.shared.hasActiveEntitlement(info) {
-                    isPremium = true
-                }
+                await authService.refreshPremiumStatus(force: true)
             }
 
-            if !isPremium && !geminiService.canAskDailySpiritualQuestion() {
+            let hasPremium = authService.isPremium
+            if !hasPremium && !geminiService.canAskDailySpiritualQuestion() {
                 showDailyLimitAlert = true
                 return
             }
 
             isAskingSpiritualQuestion = true
             let result = try? await geminiService.answerSpiritualQuestion(trimmed)
-            spiritualAnswer = result ?? "Şu an yanıt üretilemedi. Lütfen tekrar deneyin."
-            if !isPremium {
+            spiritualAnswer = result ?? L10n.string(.responseUnavailableTryAgain)
+            if !hasPremium {
                 geminiService.markDailySpiritualQuestionAsked()
             }
             isAskingSpiritualQuestion = false
@@ -529,13 +700,13 @@ struct ZikirRehberiView: View {
                     Text(mood.displayName)
                         .font(.subheadline.bold())
                         .foregroundStyle(.primary)
-                    Text("\(filteredEntries.count) dua/zikir bulundu")
+                    Text(L10n.format(.dhikrFoundCount, filteredEntries.count))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
                 HStack(spacing: 4) {
-                    Text("Temizle")
+                    Text(.temizle2)
                         .font(.caption.bold())
                         .foregroundStyle(mood.color)
                     Image(systemName: "xmark.circle.fill")
@@ -576,14 +747,14 @@ struct ZikirRehberiView: View {
 
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 6) {
-                        Text("Haftanın Hutbesi")
+                        Text(.haftaninHutbesi)
                             .font(.subheadline.bold())
                             .foregroundStyle(.primary)
                         Image(systemName: "sparkles")
                             .font(.caption2)
                             .foregroundStyle(.teal)
                     }
-                    Text("Cuma hutbesini oku, dinle ve AI özeti gör")
+                    Text(.cumaHutbesiniOkuDinleVeAiOzetiGor)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -643,6 +814,44 @@ struct CategoryChip: View {
     }
 }
 
+struct RehberEntryRow: View {
+    let entry: RehberEntry
+    let storage: StorageService
+    let onDeleteCustom: (RehberEntry) -> Void
+
+    private var isDeletable: Bool {
+        entry.category == .kullanici && storage.customZikirs.contains(where: { $0.id == entry.id })
+    }
+
+    var body: some View {
+        let link = NavigationLink(value: entry) {
+            RehberEntryCard(entry: entry, storage: storage)
+        }
+        .buttonStyle(.plain)
+
+        if isDeletable {
+            link
+                .contextMenu {
+                    deleteAction
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    deleteAction
+                }
+        } else {
+            link
+        }
+    }
+
+    @ViewBuilder
+    private var deleteAction: some View {
+        Button(role: .destructive) {
+            onDeleteCustom(entry)
+        } label: {
+            Label(L10n.string(.sil2), systemImage: "trash")
+        }
+    }
+}
+
 struct RehberEntryCard: View {
     let entry: RehberEntry
     let storage: StorageService
@@ -670,7 +879,7 @@ struct RehberEntryCard: View {
                                     .font(.caption)
                                     .foregroundStyle(catColor)
                             }
-                            Text(entry.title)
+                            Text(entry.localizedTitle)
                                 .font(.headline)
                                 .foregroundStyle(.primary)
                         }
@@ -689,15 +898,15 @@ struct RehberEntryCard: View {
                     }
                 }
 
-                Text(entry.purpose)
+                Text(entry.localizedPurpose)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
                 HStack(spacing: 8) {
-                    CountBadge(count: entry.recommendedCount, note: entry.recommendedCountNote, color: catColor)
-                    if let schedule = entry.schedule {
+                    CountBadge(count: entry.recommendedCount, note: entry.localizedRecommendedCountNote, color: catColor)
+                    if let schedule = entry.localizedSchedule {
                         Label(schedule, systemImage: "clock")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -756,38 +965,38 @@ struct GuideCustomEntrySheet: View {
     @State private var meaning: String = ""
     @State private var purpose: String = ""
     @State private var countText: String = "33"
-    @State private var contextTag: String = "Gün içinde"
-    @State private var category: String = "Kişisel"
+    @State private var contextTag: String = L10n.string(.gunIcinde)
+    @State private var category: String = L10n.string(.dhikrCustomCategoryDefault)
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Yeni zikir/dua") {
-                    TextField("Başlık", text: $title)
-                    TextField("Arapça", text: $arabicText, axis: .vertical)
+                Section(L10n.string(.yeniZikirOrDua)) {
+                    TextField(.baslik, text: $title)
+                    TextField(.arapca2, text: $arabicText, axis: .vertical)
                         .lineLimit(2...5)
-                    TextField("Okunuş", text: $transliteration)
-                    TextField("Anlam", text: $meaning, axis: .vertical)
+                    TextField(.okunus2, text: $transliteration)
+                    TextField(.anlam2, text: $meaning, axis: .vertical)
                         .lineLimit(2...4)
-                    TextField("Kısa açıklama", text: $purpose, axis: .vertical)
+                    TextField(.kisaAciklama, text: $purpose, axis: .vertical)
                         .lineLimit(2...4)
                 }
 
-                Section("Sayı & Etiket") {
-                    TextField("Önerilen tekrar", text: $countText)
+                Section(L10n.string(.sayiEtiket)) {
+                    TextField(.onerilenTekrar, text: $countText)
                         .keyboardType(.numberPad)
-                    TextField("Zaman/bağlam etiketi", text: $contextTag)
-                    TextField("Kategori", text: $category)
+                    TextField(.zamanOrBaglamEtiketi, text: $contextTag)
+                    TextField(.kategori, text: $category)
                 }
             }
-            .navigationTitle("Rehbere Ekle")
+            .navigationTitle(L10n.string(.rehbereEkle2))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button(.iptal) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") {
+                    Button(.kaydet2) {
                         saveEntry()
                         dismiss()
                     }
@@ -801,7 +1010,7 @@ struct GuideCustomEntrySheet: View {
         let count = max(Int(countText) ?? 33, 1)
         let item = ZikirItem(
             id: "guide_custom_\(UUID().uuidString)",
-            category: category.isEmpty ? "Kişisel" : category,
+            category: category.isEmpty ? L10n.string(.dhikrCustomCategoryDefault) : category,
             arabicText: arabicText,
             turkishPronunciation: title,
             turkishMeaning: meaning.isEmpty ? purpose : meaning,
@@ -841,7 +1050,7 @@ struct ZikirRehberiDetailView: View {
                     transliterationSection
                     meaningSection
                     purposeSection
-                    if let notes = entry.notes {
+                    if let notes = entry.localizedNotes {
                         notesSection(notes)
                     }
                     countSection
@@ -857,7 +1066,7 @@ struct ZikirRehberiDetailView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(entry.title)
+        .navigationTitle(entry.localizedTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -900,7 +1109,7 @@ struct ZikirRehberiDetailView: View {
                         .foregroundStyle(catColor)
                         .textCase(.uppercase)
                         .tracking(0.8)
-                    if let schedule = entry.schedule {
+                    if let schedule = entry.localizedSchedule {
                         Label(schedule, systemImage: "clock.fill")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -916,7 +1125,7 @@ struct ZikirRehberiDetailView: View {
     private var arabicSection: some View {
         VStack(alignment: .trailing, spacing: 10) {
             HStack {
-                Text("Arapça")
+                Text(.arapca)
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
                     .textCase(.uppercase)
@@ -954,7 +1163,7 @@ struct ZikirRehberiDetailView: View {
 
     private var transliterationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Okunuş", systemImage: "text.quote")
+            Label(.okunus, systemImage: "text.quote")
                 .font(.caption.bold())
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
@@ -972,12 +1181,12 @@ struct ZikirRehberiDetailView: View {
 
     private var meaningSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Anlam", systemImage: "character.book.closed.fill")
+            Label(.anlam2, systemImage: "character.book.closed.fill")
                 .font(.caption.bold())
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
                 .tracking(0.8)
-            Text(entry.meaning)
+            Text(entry.localizedMeaning)
                 .font(.body)
                 .foregroundStyle(.primary)
         }
@@ -989,12 +1198,12 @@ struct ZikirRehberiDetailView: View {
 
     private var purposeSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Fazilet", systemImage: "sparkles")
+            Label(.fazilet2, systemImage: "sparkles")
                 .font(.caption.bold())
                 .foregroundStyle(catColor)
                 .textCase(.uppercase)
                 .tracking(0.8)
-            Text(entry.purpose)
+            Text(entry.localizedPurpose)
                 .font(.body)
                 .foregroundStyle(.primary)
                 .lineSpacing(4)
@@ -1011,7 +1220,7 @@ struct ZikirRehberiDetailView: View {
 
     private func notesSection(_ notes: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Notlar", systemImage: "note.text")
+            Label(.notlar2, systemImage: "note.text")
                 .font(.caption.bold())
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
@@ -1032,7 +1241,7 @@ struct ZikirRehberiDetailView: View {
                 Text(countDisplay)
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundStyle(catColor)
-                Text("Önerilen Sayı")
+                Text(.onerilenSayi)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -1041,7 +1250,7 @@ struct ZikirRehberiDetailView: View {
             .background(catColor.opacity(0.1))
             .clipShape(.rect(cornerRadius: 16))
 
-            if let note = entry.recommendedCountNote {
+            if let note = entry.localizedRecommendedCountNote {
                 VStack(spacing: 6) {
                     Image(systemName: "info.circle.fill")
                         .font(.title2)
@@ -1057,7 +1266,7 @@ struct ZikirRehberiDetailView: View {
                 .clipShape(.rect(cornerRadius: 16))
             }
 
-            if let schedule = entry.schedule {
+            if let schedule = entry.localizedSchedule {
                 VStack(spacing: 6) {
                     Image(systemName: "clock.fill")
                         .font(.title2)
@@ -1090,7 +1299,7 @@ struct ZikirRehberiDetailView: View {
             HStack(spacing: 10) {
                 Image(systemName: "circle.circle.fill")
                     .font(.title3)
-                Text("Zikir Sayacına Gönder")
+                Text(.tesbiheEkle2)
                     .font(.headline)
             }
             .frame(maxWidth: .infinity)
@@ -1106,7 +1315,7 @@ struct ZikirRehberiDetailView: View {
         HStack(spacing: 10) {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(.green)
-            Text("Sayaç oluşturuldu")
+            Text(.tesbihOlusturuldu)
                 .font(.subheadline.bold())
         }
         .padding(.horizontal, 20)
@@ -1118,17 +1327,17 @@ struct ZikirRehberiDetailView: View {
 
     private func addCounterAndStart() {
         let counter = CounterModel(
-            name: entry.title,
+            name: entry.localizedTitle,
             targetCount: entry.recommendedCount,
             zikirItemId: entry.id
         )
         storage.addCounter(counter)
         storage.setActiveZikrSession(
             ZikrSession(
-                zikrTitle: entry.title,
+                zikrTitle: entry.localizedTitle,
                 arabicText: entry.arabicText,
                 transliteration: entry.transliteration,
-                meaning: entry.meaning,
+                meaning: entry.localizedMeaning,
                 recommendedCount: entry.recommendedCount,
                 category: entry.category.displayName,
                 sourceID: entry.id
