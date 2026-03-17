@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zikrim</title>
+  <meta name="description" content="Zikrim is a multilingual Islamic companion app for dua, dhikr, tasbihat, prayer times, qibla, guided spiritual content, and premium features.">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4efe7;
+      --panel: rgba(255, 255, 255, 0.9);
+      --text: #17202a;
+      --muted: #5b6777;
+      --accent: #0f766e;
+      --accent-strong: #115e59;
+      --accent-soft: rgba(15, 118, 110, 0.1);
+      --border: rgba(15, 23, 42, 0.1);
+      --warm: #c07c37;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(192, 124, 55, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.14), transparent 30%),
+        linear-gradient(180deg, #f7f3ec 0%, var(--bg) 100%);
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 88px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: auto -40px -60px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(15, 118, 110, 0.16), transparent 64%);
+      pointer-events: none;
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 12px 28px rgba(15, 118, 110, 0.24);
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+    label {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    select {
+      margin-left: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+    }
+    .hero-grid {
+      display: grid;
+      gap: 18px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.15;
+    }
+    .headline {
+      display: grid;
+      gap: 16px;
+    }
+    .headline p,
+    p,
+    li {
+      color: var(--muted);
+      line-height: 1.72;
+      margin: 0;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .button-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fff;
+    }
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .summary {
+      display: grid;
+      gap: 14px;
+    }
+    .metric {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.68);
+    }
+    .metric strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .section {
+      margin-top: 18px;
+      padding: 24px;
+    }
+    .section-header {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .feature-card,
+    .detail-card {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.62);
+    }
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 10px;
+    }
+    .notice {
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(192, 124, 55, 0.2);
+      background: rgba(192, 124, 55, 0.08);
+      color: #7a511e;
+    }
+    footer {
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--muted);
+      display: grid;
+      gap: 10px;
+    }
+    footer a { color: var(--accent); }
+    a { color: var(--accent); }
+    @media (min-width: 820px) {
+      .hero-grid {
+        grid-template-columns: 1.5fr 1fr;
+        align-items: start;
+      }
+      .grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid.three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card hero">
+      <div class="hero-top">
+        <div class="brand">
+          <div class="brand-badge">Z</div>
+          <span>Zikrim</span>
+        </div>
+        <div class="toolbar">
+          <label>
+            <span id="languageLabel"></span>
+            <select id="languageSelect"></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div class="headline">
+          <div class="pill-row">
+            <span class="pill" id="heroPill1"></span>
+            <span class="pill" id="heroPill2"></span>
+            <span class="pill" id="heroPill3"></span>
+          </div>
+          <h1 id="title"></h1>
+          <p id="intro"></p>
+          <div class="cta-row">
+            <a class="button button-primary" href="/privacy" id="ctaPrimary"></a>
+            <a class="button button-secondary" href="/terms" id="ctaSecondary"></a>
+          </div>
+          <div class="notice" id="heroNotice"></div>
+        </div>
+
+        <div class="summary">
+          <div class="metric">
+            <strong id="metric1Title"></strong>
+            <p id="metric1Body"></p>
+          </div>
+          <div class="metric">
+            <strong id="metric2Title"></strong>
+            <p id="metric2Body"></p>
+          </div>
+          <div class="metric">
+            <strong id="metric3Title"></strong>
+            <p id="metric3Body"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <h2 id="featuresTitle"></h2>
+        <p id="featuresIntro"></p>
+      </div>
+      <div class="grid three" id="featuresGrid"></div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <h2 id="detailsTitle"></h2>
+        <p id="detailsIntro"></p>
+      </div>
+      <div class="grid two" id="detailsGrid"></div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <h2 id="audienceTitle"></h2>
+        <p id="audienceIntro"></p>
+      </div>
+      <div class="grid two">
+        <div class="detail-card">
+          <h3 id="audienceCard1Title"></h3>
+          <ul id="audienceCard1List"></ul>
+        </div>
+        <div class="detail-card">
+          <h3 id="audienceCard2Title"></h3>
+          <ul id="audienceCard2List"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <h2 id="trustTitle"></h2>
+        <p id="trustIntro"></p>
+      </div>
+      <div class="grid two">
+        <div class="detail-card">
+          <h3 id="trustCard1Title"></h3>
+          <ul id="trustCard1List"></ul>
+        </div>
+        <div class="detail-card">
+          <h3 id="trustCard2Title"></h3>
+          <ul id="trustCard2List"></ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <strong id="footerTitle"></strong>
+      <p id="footerBody"></p>
+      <p>
+        <a href="mailto:sabahattinaliyucel@melsalegal.com">sabahattinaliyucel@melsalegal.com</a>
+        ·
+        <a href="/privacy" id="footerPrivacy"></a>
+        ·
+        <a href="/terms" id="footerTerms"></a>
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    const translations = {
+      tr: {
+        label: "Turkce",
+        languageLabel: "Dil",
+        heroPill1: "Cok dilli deneyim",
+        heroPill2: "Dua, zikir ve ibadet takibi",
+        heroPill3: "iPhone ve widget destegi",
+        title: "Zikrim, gunluk ibadet duzeninizi destekleyen kapsamli bir manevi yol arkadasidir.",
+        intro: "Zikrim; dua, zikir, tesbihat, namaz vakitleri, kivle, gunluk manevi notlar, rehber icerikler ve premium deneyim alanlarini tek uygulamada bir araya getiren cok dilli bir iOS uygulamasidir.",
+        ctaPrimary: "Gizlilik Politikasini Ac",
+        ctaSecondary: "Kullanim Sartlarini Ac",
+        heroNotice: "Uygulamadaki yapay zeka destekli ve manevi rehberlik alanlari bilgilendirme amaclidir. Dini, tibbi, hukuki veya hayati kararlar icin tek kaynak olarak kullanilmamalidir.",
+        metric1Title: "Temel amac",
+        metric1Body: "Gunluk ibadet aliskanligini duzenli, sade ve motive edici bir deneyimle desteklemek.",
+        metric2Title: "Desteklenen alanlar",
+        metric2Body: "Dua, zikir, tesbihat, kivle, namaz vakitleri, rehber icerikler, favoriler, bildirimler ve widgetlar.",
+        metric3Title: "Iletisim",
+        metric3Body: "Destek, yasal talepler ve App Store ile ilgili iletisim icin sabahattinaliyucel@melsalegal.com adresi kullanilabilir.",
+        featuresTitle: "Baslica Ozellikler",
+        featuresIntro: "Uygulama, gundelik kullanimdan daha derin manevi icerik kesfine kadar uzanan birden fazla senaryoyu destekler.",
+        features: [
+          ["Dua ve zikir rehberi", "Hazir icerikler, sayaç akislari ve duzenli takip yardimiyla gunluk pratikleri tek yerden yonetebilirsiniz."],
+          ["Namaz vakitleri ve kivle", "Konuma gore namaz vakitleri, bildirimler ve kivle ozellikleri ibadet planlamasini kolaylastirir."],
+          ["Cok dilli deneyim", "Turkce dahil birden fazla dilde arayuz, yasal metinler ve icerik sunulabilir."],
+          ["Kisisel takip", "Favoriler, gunluk notlar, istatistikler ve aliskanlik benzeri alanlarla kendi ritminizi kurabilirsiniz."],
+          ["Widget ve hizli erisim", "Ana ekran widgetlari ve pratik akislar sayesinde uygulamaya tekrar donmek kolaylasir."],
+          ["Premium alanlar", "Reklamsiz kullanim, gelismis ozellikler, bulut senkronizasyonu ve ek deneyimler premium kapsaminda sunulabilir."]
+        ],
+        detailsTitle: "Uygulama Hakkinda Daha Fazla",
+        detailsIntro: "Marketing URL olarak bu sayfa, kullanicilara uygulamanin kapsamini, yasal baglantilarini ve temel prensiplerini acikca gostermek icin hazirlandi.",
+        details: [
+          ["Kimler icin", "Gunluk dua ve zikir rutini olusturmak, manevi icerikleri daha duzenli takip etmek ve ibadet odakli bir mobil deneyim kullanmak isteyen kisiler icin tasarlanmistir."],
+          ["Neleri kapsar", "Dua listeleri, zikir sayaci, tesbihat akislari, hutbe ve rehber icerikleri, premium planlar, bildirimler ve uyumlu servis entegrasyonlarini kapsar."],
+          ["Ne degildir", "Uygulama resmi dini makam, fetva mercii, tibbi destek, psikolojik danismanlik, hukuki tavsiye veya acil durum hizmeti yerine gecmez."],
+          ["Neden bu sayfa var", "App Store incelemesi, kullanici bilgilendirmesi, destek erisimi ve resmi yasal baglantilarin tek bir kamuya acik merkezde toplanmasi icin."]
+        ],
+        audienceTitle: "Kullanim Senaryolari",
+        audienceIntro: "Bu sayfa App Store ziyaretcisi ya da mevcut kullanici icin hem tanitim hem de guven bilgisi sunar.",
+        audienceCard1Title: "Uygulamanin sundugu deneyimler",
+        audienceCard1List: [
+          "Gunluk ibadet takibi ve manevi rutin olusturma",
+          "Zikir ve dua iceriklerine hizli erisim",
+          "Namaz vakitleri ve bildirim planlama",
+          "Kisisel favori ve takip listeleri kullanma"
+        ],
+        audienceCard2Title: "Kullanicinin dikkat etmesi gerekenler",
+        audienceCard2List: [
+          "Yapay zeka destekli metinler hatasiz veya baglayici kabul edilmemelidir",
+          "Abonelik ve satin alma islemleri App Store altyapisiyla yonetilir",
+          "Izinler cihaz ayarlarindan kontrol edilebilir",
+          "Gizlilik ve kullanim sartlari ayri sayfalarda detayli olarak sunulur"
+        ],
+        trustTitle: "Guven, Yasal Erişim ve Destek",
+        trustIntro: "App Store oncesinde atlanmamasi gereken temel beklenti; calisan linkler, net iletisim, kamuya acik yasal metinler ve tutarli bir urun anlatimidir.",
+        trustCard1Title: "Yasal ve operasyonel bilgiler",
+        trustCard1List: [
+          "Gizlilik Politikasi herkese acik HTTPS adresinde yayinlanir",
+          "Kullanim Sartlari herkese acik HTTPS adresinde yayinlanir",
+          "Destek ve yasal talepler icin dogrudan e-posta adresi sunulur",
+          "Bu sayfa Marketing URL olarak App Store metadata alaninda kullanilabilir"
+        ],
+        trustCard2Title: "Baglanti noktalariniz",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Iletisim: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Zikrim Resmi Bilgilendirme Sayfasi",
+        footerBody: "Bu sayfa tanitim, App Store metadata, destek erisimi ve yasal baglantilar icin kamuya acik olarak yayinlanmaktadir.",
+        footerPrivacy: "Gizlilik",
+        footerTerms: "Sartlar"
+      },
+      en: {
+        label: "English",
+        languageLabel: "Language",
+        heroPill1: "Multilingual experience",
+        heroPill2: "Dua, dhikr, and worship tracking",
+        heroPill3: "iPhone and widget support",
+        title: "Zikrim is a comprehensive spiritual companion designed to support your daily worship routine.",
+        intro: "Zikrim brings together dua, dhikr, tasbihat, prayer times, qibla, daily spiritual notes, guided content, and premium experiences in a single multilingual iOS app.",
+        ctaPrimary: "Open Privacy Policy",
+        ctaSecondary: "Open Terms of Use",
+        heroNotice: "AI-assisted and spiritual guidance areas are provided for informational purposes only. They should not be treated as the sole basis for religious, medical, legal, or life-critical decisions.",
+        metric1Title: "Core purpose",
+        metric1Body: "To support a consistent daily worship habit with a calm, structured, and motivating mobile experience.",
+        metric2Title: "Supported areas",
+        metric2Body: "Dua, dhikr, tasbihat, qibla, prayer times, guided content, favorites, notifications, and widgets.",
+        metric3Title: "Contact",
+        metric3Body: "For support, legal requests, or App Store related communication, use sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Main Features",
+        featuresIntro: "The app supports multiple scenarios, from lightweight daily use to deeper spiritual exploration and personalization.",
+        features: [
+          ["Dua and dhikr guidance", "Ready-to-use content, counter flows, and structured tracking help users maintain daily practices in one place."],
+          ["Prayer times and qibla", "Location-aware prayer times, reminders, and qibla tools make worship planning easier."],
+          ["Multilingual access", "The interface, legal documents, and parts of the experience can be presented in multiple languages, including Turkish."],
+          ["Personal tracking", "Favorites, daily notes, statistics, and habit-style areas help each user build a personal rhythm."],
+          ["Widgets and quick access", "Home screen widgets and convenient flows make it easier to return to the app consistently."],
+          ["Premium areas", "Ad-free usage, advanced features, cloud sync, and additional experiences may be offered through premium access."]
+        ],
+        detailsTitle: "More About the App",
+        detailsIntro: "As a Marketing URL landing page, this site is intended to clearly describe the app’s scope, legal links, and product principles.",
+        details: [
+          ["Who it is for", "It is designed for people who want to build a daily dua and dhikr routine, follow spiritual content more consistently, and use a worship-focused mobile experience."],
+          ["What it covers", "It may include dua collections, dhikr counters, tasbihat flows, khutbah and guidance content, premium plans, notifications, and supported service integrations."],
+          ["What it is not", "The app is not an official religious authority, a fatwa service, medical support, psychological counseling, legal advice, or emergency assistance."],
+          ["Why this page exists", "To provide a public and reliable place for App Store review, user information, support access, and official legal links."]
+        ],
+        audienceTitle: "Use Cases",
+        audienceIntro: "This page is meant to help both App Store visitors and existing users understand the product and its trust boundaries.",
+        audienceCard1Title: "Experiences the app can support",
+        audienceCard1List: [
+          "Building a daily worship and remembrance routine",
+          "Accessing dua and dhikr content quickly",
+          "Planning around prayer times and reminders",
+          "Using favorites and personal follow-up lists"
+        ],
+        audienceCard2Title: "Important user expectations",
+        audienceCard2List: [
+          "AI-assisted text should not be assumed to be error-free or binding",
+          "Subscriptions and purchases are managed through App Store infrastructure",
+          "Permissions can be controlled in device settings",
+          "Privacy and terms are published separately with full detail"
+        ],
+        trustTitle: "Trust, Legal Access, and Support",
+        trustIntro: "Before App Store release, the essentials are working links, a clear contact address, public legal documents, and a consistent product narrative.",
+        trustCard1Title: "Legal and operational details",
+        trustCard1List: [
+          "The Privacy Policy is published on a public HTTPS page",
+          "The Terms of Use are published on a public HTTPS page",
+          "A direct support and legal contact email is provided",
+          "This page can be used as the Marketing URL in App Store metadata"
+        ],
+        trustCard2Title: "Your reference links",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Contact: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Zikrim Official Information Page",
+        footerBody: "This page is published publicly for product presentation, App Store metadata, support access, and legal reference purposes.",
+        footerPrivacy: "Privacy",
+        footerTerms: "Terms"
+      }
+    };
+
+    const localizedSets = {
+      de: {
+        label: "Deutsch",
+        languageLabel: "Sprache",
+        heroPill1: "Mehrsprachige Erfahrung",
+        heroPill2: "Dua, Dhikr und Andachtsverfolgung",
+        heroPill3: "iPhone- und Widget-Unterstuetzung",
+        title: "Zikrim ist ein umfassender spiritueller Begleiter fuer den taeglichen Andachtsrhythmus.",
+        intro: "Zikrim vereint Dua, Dhikr, Tasbihat, Gebetszeiten, Qibla, spirituelle Notizen, gefuehrte Inhalte und Premium-Bereiche in einer mehrsprachigen iOS-App.",
+        ctaPrimary: "Datenschutzrichtlinie",
+        ctaSecondary: "Nutzungsbedingungen",
+        heroNotice: "KI-gestuetzte oder spirituelle Inhalte dienen nur der Information und sollten nicht als alleinige Grundlage fuer wichtige Entscheidungen verwendet werden.",
+        metric1Title: "Zweck",
+        metric1Body: "Eine ruhige, strukturierte und motivierende Unterstuetzung fuer die taegliche religioese Praxis.",
+        metric2Title: "Bereiche",
+        metric2Body: "Dua, Dhikr, Tasbihat, Qibla, Gebetszeiten, Inhalte, Favoriten, Benachrichtigungen und Widgets.",
+        metric3Title: "Kontakt",
+        metric3Body: "Fuer Support oder rechtliche Anfragen: sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Hauptfunktionen",
+        featuresIntro: "Die App deckt einfache taegliche Nutzung ebenso ab wie tiefere spirituelle Begleitung.",
+        features: [
+          ["Dua- und Dhikr-Begleitung", "Vorgefertigte Inhalte, Zaehlerablaeufe und strukturierte Nutzung an einem Ort."],
+          ["Gebetszeiten und Qibla", "Standortbezogene Gebetszeiten, Erinnerungen und Richtungswerkzeuge."],
+          ["Mehrsprachiger Zugang", "Oberflaeche und rechtliche Seiten koennen in mehreren Sprachen bereitgestellt werden."],
+          ["Persoenliche Verfolgung", "Favoriten, Notizen und Statistiken helfen beim Aufbau einer eigenen Routine."],
+          ["Widgets", "Schneller Zugriff ueber den Home-Bildschirm."],
+          ["Premium", "Werbefreie Nutzung, erweiterte Funktionen und Cloud-Synchronisierung."]
+        ],
+        detailsTitle: "Mehr zur App",
+        detailsIntro: "Diese Seite dient als Marketing-URL und als oeffentliche Produkt- und Vertrauensseite.",
+        details: [
+          ["Fuer wen", "Fuer Nutzer, die eine taegliche Dua- und Dhikr-Routine mit mobiler Unterstuetzung aufbauen moechten."],
+          ["Inhalte", "Sammlungen, Zaehler, gefuehrte Inhalte, Premium-Plaene, Erinnerungen und Integrationen."],
+          ["Abgrenzung", "Die App ersetzt keine religioese Autoritaet, Rechtsberatung, medizinische Hilfe oder Krisenunterstuetzung."],
+          ["Warum diese Seite", "Fuer App-Store-Pruefung, Nutzerinformation, Supportzugang und oeffentliche Rechtslinks."]
+        ],
+        audienceTitle: "Anwendungsfaelle",
+        audienceIntro: "Die Seite soll Besuchern und Nutzern die Produktgrenzen und den Nutzen klar machen.",
+        audienceCard1Title: "Unterstuetzte Nutzung",
+        audienceCard1List: [
+          "Aufbau einer taeglichen Andachtsroutine",
+          "Schneller Zugriff auf Dua- und Dhikr-Inhalte",
+          "Planung rund um Gebetszeiten",
+          "Arbeit mit Favoriten und persoenlichen Listen"
+        ],
+        audienceCard2Title: "Wichtige Erwartungen",
+        audienceCard2List: [
+          "KI-Texte sind nicht als verbindlich zu verstehen",
+          "Abonnements laufen ueber den App Store",
+          "Berechtigungen werden in den Geraeteeinstellungen verwaltet",
+          "Datenschutz und Bedingungen sind separat veroeffentlicht"
+        ],
+        trustTitle: "Vertrauen, Recht und Support",
+        trustIntro: "Funktionierende Links, klare Kontaktwege und oeffentliche Rechtstexte sind vor dem Release entscheidend.",
+        trustCard1Title: "Rechtliche Angaben",
+        trustCard1List: [
+          "Datenschutz ueber oeffentliche HTTPS-Seite erreichbar",
+          "Nutzungsbedingungen ueber oeffentliche HTTPS-Seite erreichbar",
+          "Direkte Kontakt-E-Mail vorhanden",
+          "Diese Seite kann als Marketing-URL genutzt werden"
+        ],
+        trustCard2Title: "Referenzlinks",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Kontakt: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Offizielle Zikrim-Informationsseite",
+        footerBody: "Diese Seite ist oeffentlich fuer Produktdarstellung, App-Store-Metadaten, Support und rechtliche Verweise verfuegbar.",
+        footerPrivacy: "Datenschutz",
+        footerTerms: "Bedingungen"
+      },
+      es: {
+        label: "Espanol",
+        languageLabel: "Idioma",
+        heroPill1: "Experiencia multilingue",
+        heroPill2: "Dua, dhikr y seguimiento",
+        heroPill3: "Compatibilidad con iPhone y widgets",
+        title: "Zikrim es un companero espiritual completo para acompanar la rutina diaria de adoracion.",
+        intro: "Zikrim reune dua, dhikr, tasbihat, horarios de oracion, qibla, notas espirituales, contenido guiado y areas premium en una sola app iOS multilingue.",
+        ctaPrimary: "Abrir Politica de Privacidad",
+        ctaSecondary: "Abrir Terminos de Uso",
+        heroNotice: "Las areas asistidas por IA o de orientacion espiritual son informativas y no deben ser la unica base para decisiones importantes.",
+        metric1Title: "Proposito",
+        metric1Body: "Apoyar una practica diaria de adoracion con una experiencia movil calmada y estructurada.",
+        metric2Title: "Areas incluidas",
+        metric2Body: "Dua, dhikr, tasbihat, qibla, horarios de oracion, contenido guiado, favoritos, notificaciones y widgets.",
+        metric3Title: "Contacto",
+        metric3Body: "Soporte y solicitudes legales: sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Funciones Principales",
+        featuresIntro: "La app admite desde uso cotidiano ligero hasta acompanamiento espiritual mas profundo.",
+        features: [
+          ["Guia de dua y dhikr", "Contenido preparado, contadores y seguimiento estructurado en un solo lugar."],
+          ["Horarios de oracion y qibla", "Funciones basadas en ubicacion para facilitar la planificacion."],
+          ["Acceso multilingue", "Interfaz y textos legales disponibles en varios idiomas."],
+          ["Seguimiento personal", "Favoritos, notas y estadisticas para crear una rutina propia."],
+          ["Widgets", "Acceso rapido desde la pantalla principal."],
+          ["Premium", "Uso sin anuncios, funciones avanzadas y sincronizacion en la nube."]
+        ],
+        detailsTitle: "Mas Sobre la Aplicacion",
+        detailsIntro: "Esta pagina sirve como URL de marketing y como punto publico de informacion y confianza.",
+        details: [
+          ["Para quien es", "Para personas que desean una rutina diaria de dua y dhikr con apoyo movil."],
+          ["Que incluye", "Colecciones, contadores, contenido guiado, planes premium, notificaciones e integraciones."],
+          ["Que no es", "No sustituye autoridad religiosa, consejo legal, ayuda medica ni asistencia de emergencia."],
+          ["Por que existe esta pagina", "Para revision de App Store, informacion del usuario, soporte y enlaces legales."]
+        ],
+        audienceTitle: "Casos de Uso",
+        audienceIntro: "La pagina ayuda a usuarios actuales y visitantes a entender el producto y sus limites.",
+        audienceCard1Title: "Experiencias compatibles",
+        audienceCard1List: [
+          "Crear una rutina diaria de adoracion",
+          "Acceder rapido a contenido de dua y dhikr",
+          "Planificar segun horarios de oracion",
+          "Usar favoritos y listas personales"
+        ],
+        audienceCard2Title: "Expectativas importantes",
+        audienceCard2List: [
+          "Los textos asistidos por IA no son vinculantes",
+          "Las suscripciones se gestionan mediante App Store",
+          "Los permisos se controlan en ajustes del dispositivo",
+          "Privacidad y terminos se publican por separado"
+        ],
+        trustTitle: "Confianza, Aspectos Legales y Soporte",
+        trustIntro: "Antes del lanzamiento, lo esencial es tener enlaces activos, contacto claro y documentos legales publicos.",
+        trustCard1Title: "Detalles legales",
+        trustCard1List: [
+          "La politica de privacidad esta publicada en HTTPS",
+          "Los terminos de uso estan publicados en HTTPS",
+          "Existe un correo directo de soporte y asuntos legales",
+          "Esta pagina puede usarse como Marketing URL"
+        ],
+        trustCard2Title: "Enlaces de referencia",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Contacto: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Pagina Oficial de Informacion de Zikrim",
+        footerBody: "Esta pagina se publica para presentacion del producto, metadata de App Store, soporte y referencia legal.",
+        footerPrivacy: "Privacidad",
+        footerTerms: "Terminos"
+      },
+      fr: {
+        label: "Francais",
+        languageLabel: "Langue",
+        heroPill1: "Experience multilingue",
+        heroPill2: "Dua, dhikr et suivi spirituel",
+        heroPill3: "Compatibilite iPhone et widgets",
+        title: "Zikrim est un compagnon spirituel complet concu pour accompagner la pratique quotidienne.",
+        intro: "Zikrim rassemble dua, dhikr, tasbihat, horaires de priere, qibla, notes spirituelles, contenus guides et espaces premium dans une application iOS multilingue.",
+        ctaPrimary: "Ouvrir la Politique de Confidentialite",
+        ctaSecondary: "Ouvrir les Conditions d'Utilisation",
+        heroNotice: "Les zones assistees par IA ou de guidance spirituelle ont une valeur informative uniquement et ne doivent pas etre la seule base de decisions importantes.",
+        metric1Title: "Objectif",
+        metric1Body: "Soutenir une pratique spirituelle quotidienne avec une experience mobile claire et apaisante.",
+        metric2Title: "Fonctions prises en charge",
+        metric2Body: "Dua, dhikr, tasbihat, qibla, horaires de priere, contenus guides, favoris, notifications et widgets.",
+        metric3Title: "Contact",
+        metric3Body: "Support et demandes juridiques : sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Fonctionnalites Principales",
+        featuresIntro: "L'application couvre un usage quotidien simple comme des besoins plus approfondis de suivi spirituel.",
+        features: [
+          ["Guide de dua et dhikr", "Contenus prets a l'emploi, compteurs et suivi structure dans un seul espace."],
+          ["Horaires de priere et qibla", "Fonctions basees sur la localisation pour faciliter l'organisation religieuse."],
+          ["Acces multilingue", "Interface et textes juridiques disponibles en plusieurs langues."],
+          ["Suivi personnel", "Favoris, notes et statistiques pour construire un rythme personnel."],
+          ["Widgets", "Acces rapide depuis l'ecran d'accueil."],
+          ["Premium", "Utilisation sans publicite, fonctions avancees et synchronisation cloud."]
+        ],
+        detailsTitle: "En Savoir Plus",
+        detailsIntro: "Cette page sert de Marketing URL et de point public d'information et de confiance.",
+        details: [
+          ["Pour qui", "Pour les personnes souhaitant etablir une routine quotidienne de dua et de dhikr avec support mobile."],
+          ["Ce qui est inclus", "Collections, compteurs, contenus guides, abonnements premium, notifications et integrations."],
+          ["Ce que ce n'est pas", "L'application ne remplace pas une autorite religieuse, un conseil juridique, une aide medicale ou un service d'urgence."],
+          ["Pourquoi cette page", "Pour l'examen App Store, l'information utilisateur, l'acces au support et les liens juridiques publics."]
+        ],
+        audienceTitle: "Usages",
+        audienceIntro: "Cette page aide les visiteurs et les utilisateurs existants a comprendre le produit et ses limites.",
+        audienceCard1Title: "Experiences accompagnees",
+        audienceCard1List: [
+          "Construire une routine quotidienne de devotion",
+          "Acceder rapidement aux contenus de dua et dhikr",
+          "Organiser sa pratique autour des horaires de priere",
+          "Utiliser favoris et listes personnelles"
+        ],
+        audienceCard2Title: "Attentes importantes",
+        audienceCard2List: [
+          "Les contenus IA ne sont pas contraignants",
+          "Les abonnements sont geres via l'App Store",
+          "Les autorisations se reglent dans l'appareil",
+          "Confidentialite et conditions sont publiees separement"
+        ],
+        trustTitle: "Confiance, Aspects Juridiques et Support",
+        trustIntro: "Avant la publication, il faut surtout des liens actifs, un contact clair et des documents juridiques publics.",
+        trustCard1Title: "Informations juridiques",
+        trustCard1List: [
+          "La politique de confidentialite est disponible en HTTPS",
+          "Les conditions d'utilisation sont disponibles en HTTPS",
+          "Une adresse e-mail directe de support est fournie",
+          "Cette page peut servir de Marketing URL"
+        ],
+        trustCard2Title: "Liens de reference",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Contact: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Page Officielle d'Information Zikrim",
+        footerBody: "Cette page est publiee a des fins de presentation, de metadata App Store, de support et de reference juridique.",
+        footerPrivacy: "Confidentialite",
+        footerTerms: "Conditions"
+      },
+      id: {
+        label: "Bahasa Indonesia",
+        languageLabel: "Bahasa",
+        heroPill1: "Pengalaman multibahasa",
+        heroPill2: "Dua, dzikir, dan pelacakan ibadah",
+        heroPill3: "Dukungan iPhone dan widget",
+        title: "Zikrim adalah pendamping spiritual lengkap untuk mendukung rutinitas ibadah harian.",
+        intro: "Zikrim menghadirkan dua, dzikir, tasbihat, waktu salat, kiblat, catatan spiritual, konten panduan, dan pengalaman premium dalam satu aplikasi iOS multibahasa.",
+        ctaPrimary: "Buka Kebijakan Privasi",
+        ctaSecondary: "Buka Syarat Penggunaan",
+        heroNotice: "Fitur berbantuan AI atau panduan spiritual bersifat informatif dan tidak boleh menjadi satu-satunya dasar keputusan penting.",
+        metric1Title: "Tujuan utama",
+        metric1Body: "Mendukung kebiasaan ibadah harian dengan pengalaman seluler yang tenang dan terstruktur.",
+        metric2Title: "Area yang didukung",
+        metric2Body: "Dua, dzikir, tasbihat, kiblat, waktu salat, konten panduan, favorit, notifikasi, dan widget.",
+        metric3Title: "Kontak",
+        metric3Body: "Untuk dukungan dan permintaan hukum: sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Fitur Utama",
+        featuresIntro: "Aplikasi ini mendukung kebutuhan harian ringan hingga eksplorasi spiritual yang lebih dalam.",
+        features: [
+          ["Panduan dua dan dzikir", "Konten siap pakai, alur penghitung, dan pelacakan terstruktur dalam satu tempat."],
+          ["Waktu salat dan kiblat", "Fitur berbasis lokasi untuk memudahkan perencanaan ibadah."],
+          ["Akses multibahasa", "Antarmuka dan halaman hukum tersedia dalam beberapa bahasa."],
+          ["Pelacakan pribadi", "Favorit, catatan, dan statistik membantu membangun ritme pribadi."],
+          ["Widget", "Akses cepat dari layar utama."],
+          ["Premium", "Penggunaan tanpa iklan, fitur lanjutan, dan sinkronisasi cloud."]
+        ],
+        detailsTitle: "Tentang Aplikasi",
+        detailsIntro: "Halaman ini berfungsi sebagai Marketing URL dan pusat informasi publik yang dapat dipercaya.",
+        details: [
+          ["Untuk siapa", "Bagi pengguna yang ingin membangun rutinitas dua dan dzikir harian dengan dukungan seluler."],
+          ["Cakupan", "Koleksi, penghitung, konten panduan, paket premium, notifikasi, dan integrasi yang didukung."],
+          ["Bukan pengganti", "Aplikasi ini tidak menggantikan otoritas agama, nasihat hukum, bantuan medis, atau layanan darurat."],
+          ["Alasan halaman ini", "Untuk tinjauan App Store, informasi pengguna, akses dukungan, dan tautan hukum publik."]
+        ],
+        audienceTitle: "Skenario Penggunaan",
+        audienceIntro: "Halaman ini membantu pengunjung App Store dan pengguna memahami manfaat dan batas produk.",
+        audienceCard1Title: "Pengalaman yang didukung",
+        audienceCard1List: [
+          "Membangun rutinitas ibadah harian",
+          "Mengakses konten dua dan dzikir dengan cepat",
+          "Merencanakan aktivitas berdasarkan waktu salat",
+          "Menggunakan favorit dan daftar pribadi"
+        ],
+        audienceCard2Title: "Harapan penting",
+        audienceCard2List: [
+          "Teks berbantuan AI tidak bersifat mengikat",
+          "Langganan dikelola melalui App Store",
+          "Izin dapat diatur dari perangkat",
+          "Privasi dan syarat dipublikasikan terpisah"
+        ],
+        trustTitle: "Kepercayaan, Hukum, dan Dukungan",
+        trustIntro: "Sebelum rilis, yang penting adalah tautan aktif, kontak yang jelas, dan dokumen hukum publik.",
+        trustCard1Title: "Detail hukum",
+        trustCard1List: [
+          "Kebijakan privasi tersedia di halaman HTTPS publik",
+          "Syarat penggunaan tersedia di halaman HTTPS publik",
+          "Email dukungan dan hukum tersedia langsung",
+          "Halaman ini dapat dipakai sebagai Marketing URL"
+        ],
+        trustCard2Title: "Tautan referensi",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Kontak: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Halaman Informasi Resmi Zikrim",
+        footerBody: "Halaman ini dipublikasikan untuk presentasi produk, metadata App Store, dukungan, dan referensi hukum.",
+        footerPrivacy: "Privasi",
+        footerTerms: "Syarat"
+      },
+      ms: {
+        label: "Bahasa Melayu",
+        languageLabel: "Bahasa",
+        heroPill1: "Pengalaman berbilang bahasa",
+        heroPill2: "Doa, zikir, dan penjejakan ibadah",
+        heroPill3: "Sokongan iPhone dan widget",
+        title: "Zikrim ialah teman rohani menyeluruh untuk menyokong rutin ibadah harian.",
+        intro: "Zikrim menghimpunkan doa, zikir, tasbihat, waktu solat, kiblat, nota rohani, kandungan berpandu, dan pengalaman premium dalam satu aplikasi iOS berbilang bahasa.",
+        ctaPrimary: "Buka Polisi Privasi",
+        ctaSecondary: "Buka Syarat Penggunaan",
+        heroNotice: "Bahagian yang dibantu AI atau panduan rohani adalah untuk maklumat sahaja dan tidak patut menjadi satu-satunya asas keputusan penting.",
+        metric1Title: "Tujuan utama",
+        metric1Body: "Menyokong amalan ibadah harian dengan pengalaman mudah alih yang tenang dan tersusun.",
+        metric2Title: "Bahagian disokong",
+        metric2Body: "Doa, zikir, tasbihat, kiblat, waktu solat, kandungan berpandu, kegemaran, notifikasi, dan widget.",
+        metric3Title: "Hubungi",
+        metric3Body: "Untuk sokongan dan permintaan undang-undang: sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "Ciri Utama",
+        featuresIntro: "Aplikasi ini menyokong kegunaan harian ringkas hingga penerokaan rohani yang lebih mendalam.",
+        features: [
+          ["Panduan doa dan zikir", "Kandungan sedia digunakan, aliran kaunter, dan penjejakan tersusun di satu tempat."],
+          ["Waktu solat dan kiblat", "Ciri berasaskan lokasi untuk memudahkan perancangan ibadah."],
+          ["Akses berbilang bahasa", "Antara muka dan halaman undang-undang tersedia dalam beberapa bahasa."],
+          ["Penjejakan peribadi", "Kegemaran, nota, dan statistik membantu membina rentak peribadi."],
+          ["Widget", "Akses pantas dari skrin utama."],
+          ["Premium", "Penggunaan tanpa iklan, ciri lanjutan, dan penyegerakan awan."]
+        ],
+        detailsTitle: "Tentang Aplikasi",
+        detailsIntro: "Halaman ini berfungsi sebagai Marketing URL dan pusat maklumat awam yang boleh dipercayai.",
+        details: [
+          ["Untuk siapa", "Bagi pengguna yang ingin membina rutin doa dan zikir harian dengan sokongan mudah alih."],
+          ["Skop", "Koleksi, kaunter, kandungan berpandu, pelan premium, notifikasi, dan integrasi yang disokong."],
+          ["Bukan pengganti", "Aplikasi ini tidak menggantikan autoriti agama, nasihat undang-undang, bantuan perubatan, atau perkhidmatan kecemasan."],
+          ["Mengapa halaman ini wujud", "Untuk semakan App Store, maklumat pengguna, akses sokongan, dan pautan undang-undang awam."]
+        ],
+        audienceTitle: "Senario Penggunaan",
+        audienceIntro: "Halaman ini membantu pelawat App Store dan pengguna memahami manfaat serta had produk.",
+        audienceCard1Title: "Pengalaman yang disokong",
+        audienceCard1List: [
+          "Membina rutin ibadah harian",
+          "Mengakses kandungan doa dan zikir dengan pantas",
+          "Merancang berdasarkan waktu solat",
+          "Menggunakan kegemaran dan senarai peribadi"
+        ],
+        audienceCard2Title: "Jangkaan penting",
+        audienceCard2List: [
+          "Teks berbantuan AI tidak bersifat mengikat",
+          "Langganan diurus melalui App Store",
+          "Kebenaran boleh dikawal pada peranti",
+          "Privasi dan syarat diterbitkan secara berasingan"
+        ],
+        trustTitle: "Kepercayaan, Undang-undang, dan Sokongan",
+        trustIntro: "Sebelum pelancaran, yang penting ialah pautan aktif, saluran hubungan jelas, dan dokumen undang-undang awam.",
+        trustCard1Title: "Butiran undang-undang",
+        trustCard1List: [
+          "Polisi privasi tersedia pada halaman HTTPS awam",
+          "Syarat penggunaan tersedia pada halaman HTTPS awam",
+          "E-mel sokongan dan undang-undang disediakan secara langsung",
+          "Halaman ini boleh digunakan sebagai Marketing URL"
+        ],
+        trustCard2Title: "Pautan rujukan",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "Hubungi: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Halaman Maklumat Rasmi Zikrim",
+        footerBody: "Halaman ini diterbitkan untuk persembahan produk, metadata App Store, sokongan, dan rujukan undang-undang.",
+        footerPrivacy: "Privasi",
+        footerTerms: "Syarat"
+      },
+      ar: {
+        label: "العربية",
+        languageLabel: "اللغة",
+        heroPill1: "تجربة متعددة اللغات",
+        heroPill2: "الدعاء والذكر ومتابعة العبادة",
+        heroPill3: "دعم iPhone والودجت",
+        title: "Zikrim رفيق روحي متكامل لدعم الروتين اليومي في العبادة.",
+        intro: "يجمع Zikrim بين الدعاء والذكر والتسبيحات ومواقيت الصلاة والقبلة والملاحظات الروحية والمحتوى الموجه والمزايا المميزة في تطبيق iOS متعدد اللغات.",
+        ctaPrimary: "فتح سياسة الخصوصية",
+        ctaSecondary: "فتح شروط الاستخدام",
+        heroNotice: "المناطق المدعومة بالذكاء الاصطناعي أو التوجيه الروحي هي لأغراض معلوماتية فقط ولا ينبغي الاعتماد عليها وحدها في القرارات المهمة.",
+        metric1Title: "الهدف",
+        metric1Body: "دعم عادة العبادة اليومية من خلال تجربة هادئة ومنظمة على الهاتف.",
+        metric2Title: "المجالات المدعومة",
+        metric2Body: "الدعاء والذكر والتسبيحات والقبلة ومواقيت الصلاة والمحتوى الموجه والمفضلة والتنبيهات والودجت.",
+        metric3Title: "التواصل",
+        metric3Body: "للدعم والطلبات القانونية: sabahattinaliyucel@melsalegal.com.",
+        featuresTitle: "الميزات الرئيسية",
+        featuresIntro: "يدعم التطبيق الاستخدام اليومي البسيط وكذلك الاحتياجات الروحية الاكثر عمقا.",
+        features: [
+          ["دليل الدعاء والذكر", "محتوى جاهز وعدادات وتدفق منظم للمتابعة في مكان واحد."],
+          ["مواقيت الصلاة والقبلة", "ميزات تعتمد على الموقع لتسهيل التخطيط للعبادة."],
+          ["وصول متعدد اللغات", "الواجهة والصفحات القانونية متاحة بعدة لغات."],
+          ["متابعة شخصية", "المفضلة والملاحظات والاحصاءات تساعد على بناء نسق شخصي."],
+          ["الودجت", "وصول سريع من الشاشة الرئيسية."],
+          ["المزايا المميزة", "استخدام بدون اعلانات وميزات متقدمة ومزامنة سحابية."]
+        ],
+        detailsTitle: "مزيد من المعلومات",
+        detailsIntro: "تعمل هذه الصفحة كرابط تسويقي عام ونقطة موثوقة للمعلومات العامة.",
+        details: [
+          ["لمن هذا التطبيق", "لمن يريد بناء روتين يومي للدعاء والذكر مع دعم عبر الهاتف."],
+          ["ما الذي يشمله", "مجموعات وعدادات ومحتوى موجه وخطط مميزة وتنبيهات وتكاملات مدعومة."],
+          ["ما الذي لا يمثله", "التطبيق لا يحل محل جهة دينية رسمية أو استشارة قانونية أو مساعدة طبية أو خدمة طوارئ."],
+          ["سبب وجود الصفحة", "لمراجعة App Store ومعلومات المستخدم والوصول للدعم والروابط القانونية العامة."]
+        ],
+        audienceTitle: "سيناريوهات الاستخدام",
+        audienceIntro: "تساعد هذه الصفحة الزوار والمستخدمين على فهم المنتج وحدوده بشكل واضح.",
+        audienceCard1Title: "ما الذي يمكن دعمه",
+        audienceCard1List: [
+          "بناء روتين يومي للعبادة",
+          "الوصول السريع الى محتوى الدعاء والذكر",
+          "التخطيط وفقا لمواقيت الصلاة",
+          "استخدام المفضلة والقوائم الشخصية"
+        ],
+        audienceCard2Title: "توقعات مهمة",
+        audienceCard2List: [
+          "النصوص المدعومة بالذكاء الاصطناعي ليست ملزمة",
+          "الاشتراكات تدار عبر App Store",
+          "الاذونات يمكن التحكم بها من الجهاز",
+          "الخصوصية والشروط منشورة بشكل منفصل"
+        ],
+        trustTitle: "الثقة والوصول القانوني والدعم",
+        trustIntro: "قبل النشر في App Store يجب وجود روابط عاملة ووسيلة تواصل واضحة ووثائق قانونية عامة.",
+        trustCard1Title: "تفاصيل قانونية وتشغيلية",
+        trustCard1List: [
+          "سياسة الخصوصية منشورة على صفحة HTTPS عامة",
+          "شروط الاستخدام منشورة على صفحة HTTPS عامة",
+          "يوجد بريد مباشر للدعم والطلبات القانونية",
+          "يمكن استخدام هذه الصفحة كرابط Marketing URL"
+        ],
+        trustCard2Title: "الروابط المرجعية",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "التواصل: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "الصفحة الرسمية التعريفية لـ Zikrim",
+        footerBody: "تم نشر هذه الصفحة لعرض المنتج وبيانات App Store والدعم والروابط القانونية.",
+        footerPrivacy: "الخصوصية",
+        footerTerms: "الشروط"
+      },
+      ur: {
+        label: "اردو",
+        languageLabel: "زبان",
+        heroPill1: "کئی زبانوں کا تجربہ",
+        heroPill2: "دعا، ذکر اور عبادت کی نگرانی",
+        heroPill3: "iPhone اور widget سپورٹ",
+        title: "Zikrim روزمرہ عبادت کے نظم کو سہارا دینے والا ایک جامع روحانی ساتھی ہے۔",
+        intro: "Zikrim دعا، ذکر، تسبیحات، نماز کے اوقات، قبلہ، روحانی نوٹس، رہنمائی شدہ مواد، اور پریمیم تجربات کو ایک کثیر لسانی iOS ایپ میں جمع کرتا ہے۔",
+        ctaPrimary: "پرائیویسی پالیسی کھولیں",
+        ctaSecondary: "استعمال کی شرائط کھولیں",
+        heroNotice: "AI یا روحانی رہنمائی والے حصے صرف معلوماتی مقصد کے لئے ہیں اور اہم فیصلوں کی واحد بنیاد نہیں بننے چاہییں۔",
+        metric1Title: "بنیادی مقصد",
+        metric1Body: "پرسکون اور منظم موبائل تجربے کے ذریعے روزانہ عبادت کی عادت کو سہارا دینا۔",
+        metric2Title: "سپورٹ شدہ حصے",
+        metric2Body: "دعا، ذکر، تسبیحات، قبلہ، نماز کے اوقات، رہنمائی شدہ مواد، پسندیدہ، نوٹیفکیشنز اور widgets۔",
+        metric3Title: "رابطہ",
+        metric3Body: "سپورٹ اور قانونی درخواستوں کے لئے: sabahattinaliyucel@melsalegal.com۔",
+        featuresTitle: "اہم خصوصیات",
+        featuresIntro: "ایپ روزمرہ سادہ استعمال سے لے کر زیادہ گہری روحانی رہنمائی تک مختلف صورتیں سپورٹ کرتی ہے۔",
+        features: [
+          ["دعا اور ذکر رہنمائی", "تیار مواد، counters، اور منظم tracking ایک ہی جگہ."],
+          ["نماز کے اوقات اور قبلہ", "مقام پر مبنی خصوصیات عبادت کی منصوبہ بندی کو آسان بناتی ہیں۔"],
+          ["کئی زبانوں میں رسائی", "انٹرفیس اور قانونی صفحات مختلف زبانوں میں دستیاب ہو سکتے ہیں۔"],
+          ["ذاتی ٹریکنگ", "پسندیدہ، نوٹس، اور statistics ذاتی rhythm بنانے میں مدد دیتے ہیں۔"],
+          ["widgets", "ہوم اسکرین سے تیز رسائی۔"],
+          ["Premium", "بغیر اشتہار استعمال، advanced features، اور cloud sync۔"]
+        ],
+        detailsTitle: "ایپ کے بارے میں مزید",
+        detailsIntro: "یہ صفحہ Marketing URL اور عوامی معلوماتی مرکز کے طور پر تیار کیا گیا ہے۔",
+        details: [
+          ["کس کے لئے", "ان صارفین کے لئے جو دعا اور ذکر کی روزانہ عادت موبائل سپورٹ کے ساتھ بنانا چاہتے ہیں۔"],
+          ["کیا شامل ہے", "مجموعے، counters، guided content، premium plans، notifications، اور integrations۔"],
+          ["یہ کیا نہیں", "ایپ مذہبی اتھارٹی، قانونی مشورہ، طبی مدد، یا ایمرجنسی سروس کا متبادل نہیں ہے۔"],
+          ["یہ صفحہ کیوں", "App Store review، صارف معلومات، سپورٹ رسائی، اور عوامی قانونی لنکس کے لئے۔"]
+        ],
+        audienceTitle: "استعمال کے منظرنامے",
+        audienceIntro: "یہ صفحہ نئے اور موجودہ صارفین کو پروڈکٹ اور اس کی حدود سمجھنے میں مدد دیتا ہے۔",
+        audienceCard1Title: "ایپ کن چیزوں میں مدد کر سکتی ہے",
+        audienceCard1List: [
+          "روزانہ عبادت کا معمول بنانا",
+          "دعا اور ذکر کے مواد تک فوری رسائی",
+          "نماز کے اوقات کے مطابق منصوبہ بندی",
+          "پسندیدہ اور ذاتی فہرستوں کا استعمال"
+        ],
+        audienceCard2Title: "اہم توقعات",
+        audienceCard2List: [
+          "AI سے مدد یافتہ متن لازمی یا حتمی نہیں",
+          "سبسکرپشنز App Store کے ذریعے چلتی ہیں",
+          "اجازتیں device settings سے کنٹرول کی جا سکتی ہیں",
+          "privacy اور terms الگ تفصیل سے شائع ہیں"
+        ],
+        trustTitle: "اعتماد، قانونی رسائی، اور سپورٹ",
+        trustIntro: "App Store سے پہلے اہم چیزیں یہ ہیں: چلتے ہوئے links، واضح رابطہ، اور عوامی قانونی صفحات۔",
+        trustCard1Title: "قانونی اور عملی معلومات",
+        trustCard1List: [
+          "Privacy Policy عوامی HTTPS صفحے پر موجود ہے",
+          "Terms of Use عوامی HTTPS صفحے پر موجود ہیں",
+          "براہ راست سپورٹ اور قانونی ای میل دستیاب ہے",
+          "یہ صفحہ Marketing URL کے طور پر استعمال ہو سکتا ہے"
+        ],
+        trustCard2Title: "حوالہ جاتی links",
+        trustCard2List: [
+          "Marketing URL: https://melsalegal.com",
+          "Privacy Policy URL: https://melsalegal.com/privacy",
+          "Terms of Use URL: https://melsalegal.com/terms",
+          "رابطہ: sabahattinaliyucel@melsalegal.com"
+        ],
+        footerTitle: "Zikrim کی سرکاری معلوماتی صفحہ",
+        footerBody: "یہ صفحہ پروڈکٹ پریزنٹیشن، App Store metadata، سپورٹ، اور قانونی حوالہ کے لئے عوامی طور پر شائع کیا گیا ہے۔",
+        footerPrivacy: "پرائیویسی",
+        footerTerms: "شرائط"
+      }
+    };
+
+    const languageOrder = ["tr", "en", "de", "es", "fr", "id", "ms", "ar", "ur"];
+
+    function setText(id, value) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    function renderList(id, items) {
+      const node = document.getElementById(id);
+      if (!node) return;
+      node.innerHTML = "";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        node.appendChild(li);
+      });
+    }
+
+    function renderPairGrid(id, items, className) {
+      const node = document.getElementById(id);
+      if (!node) return;
+      node.innerHTML = "";
+      items.forEach(([title, body]) => {
+        const card = document.createElement("div");
+        card.className = className;
+        const h3 = document.createElement("h3");
+        h3.textContent = title;
+        const p = document.createElement("p");
+        p.style.marginTop = "10px";
+        p.textContent = body;
+        card.appendChild(h3);
+        card.appendChild(p);
+        node.appendChild(card);
+      });
+    }
+
+    function populateSelector() {
+      const select = document.getElementById("languageSelect");
+      languageOrder.forEach((code) => {
+        const data = translations[code] || localizedSets[code];
+        const option = document.createElement("option");
+        option.value = code;
+        option.textContent = data.label;
+        select.appendChild(option);
+      });
+      return select;
+    }
+
+    function resolveLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const explicit = params.get("lang");
+      if (explicit && languageOrder.includes(explicit)) return explicit;
+      const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
+      if (languageOrder.includes(browser)) return browser;
+      return "en";
+    }
+
+    function applyLanguage(code) {
+      const data = translations[code] || localizedSets[code] || translations.en;
+      document.documentElement.lang = code;
+      setText("languageLabel", data.languageLabel);
+      setText("heroPill1", data.heroPill1);
+      setText("heroPill2", data.heroPill2);
+      setText("heroPill3", data.heroPill3);
+      setText("title", data.title);
+      setText("intro", data.intro);
+      setText("ctaPrimary", data.ctaPrimary);
+      setText("ctaSecondary", data.ctaSecondary);
+      setText("heroNotice", data.heroNotice);
+      setText("metric1Title", data.metric1Title);
+      setText("metric1Body", data.metric1Body);
+      setText("metric2Title", data.metric2Title);
+      setText("metric2Body", data.metric2Body);
+      setText("metric3Title", data.metric3Title);
+      setText("metric3Body", data.metric3Body);
+      setText("featuresTitle", data.featuresTitle);
+      setText("featuresIntro", data.featuresIntro);
+      setText("detailsTitle", data.detailsTitle);
+      setText("detailsIntro", data.detailsIntro);
+      setText("audienceTitle", data.audienceTitle);
+      setText("audienceIntro", data.audienceIntro);
+      setText("audienceCard1Title", data.audienceCard1Title);
+      setText("audienceCard2Title", data.audienceCard2Title);
+      setText("trustTitle", data.trustTitle);
+      setText("trustIntro", data.trustIntro);
+      setText("trustCard1Title", data.trustCard1Title);
+      setText("trustCard2Title", data.trustCard2Title);
+      setText("footerTitle", data.footerTitle);
+      setText("footerBody", data.footerBody);
+      setText("footerPrivacy", data.footerPrivacy);
+      setText("footerTerms", data.footerTerms);
+      renderPairGrid("featuresGrid", data.features, "feature-card");
+      renderPairGrid("detailsGrid", data.details, "detail-card");
+      renderList("audienceCard1List", data.audienceCard1List);
+      renderList("audienceCard2List", data.audienceCard2List);
+      renderList("trustCard1List", data.trustCard1List);
+      renderList("trustCard2List", data.trustCard2List);
+      document.getElementById("languageSelect").value = code;
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", code);
+      window.history.replaceState({}, "", url);
+    }
+
+    const select = populateSelector();
+    applyLanguage(resolveLanguage());
+    select.addEventListener("change", (event) => {
+      applyLanguage(event.target.value);
+    });
+  </script>
+</body>
+</html>
