@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zikrim KVKK Aydinlatma Metni</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f1e8;
+      --panel: rgba(255, 255, 255, 0.94);
+      --text: #1f2937;
+      --muted: #5f6b7b;
+      --accent: #0f766e;
+      --accent-soft: rgba(15, 118, 110, 0.08);
+      --border: rgba(15, 23, 42, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 26%),
+        linear-gradient(180deg, #f7f4ed 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 44px 20px 88px;
+    }
+
+    .hero,
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .intro {
+      margin-top: 14px;
+      color: var(--muted);
+      line-height: 1.72;
+      max-width: 78ch;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    select {
+      margin-left: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .note {
+      padding: 14px 16px;
+      background: rgba(15, 118, 110, 0.06);
+      border: 1px solid rgba(15, 118, 110, 0.14);
+      border-radius: 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 540px;
+    }
+
+    .sections {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section-card {
+      padding: 24px;
+    }
+
+    .section-card h2 {
+      margin-bottom: 14px;
+      font-size: 21px;
+    }
+
+    .section-body {
+      display: grid;
+      gap: 14px;
+    }
+
+    .section-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    @media (min-width: 860px) {
+      .sections {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Zikrim</div>
+      <h1 id="title"></h1>
+      <p class="intro" id="intro"></p>
+      <div class="hero-meta">
+        <div class="pill" id="updated"></div>
+        <div class="pill" id="version"></div>
+        <div class="pill" id="email"></div>
+      </div>
+      <div class="toolbar">
+        <label>
+          <span id="languageLabel"></span>
+          <select id="languageSelect"></select>
+        </label>
+        <div class="note" id="note"></div>
+      </div>
+    </section>
+
+    <div class="sections" id="sections"></div>
+
+    <footer>
+      <p id="footer"></p>
+      <p>
+        <a href="mailto:sabahattinaliyucel@melsalegal.com">sabahattinaliyucel@melsalegal.com</a>
+        ·
+        <a href="/">Tanıtım sayfası</a>
+        ·
+        <a href="/support" id="footerSupport"></a>
+        ·
+        <a href="/privacy" id="footerPrivacy"></a>
+        ·
+        <a href="/kvkk">KVKK</a>
+        ·
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" id="footerTerms" target="_blank" rel="noreferrer"></a>
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    const supportEmail = "sabahattinaliyucel@melsalegal.com";
+    const dataControllerName = "Sabahattin Ali YÜCEL";
+
+    const translations = {
+      tr: {
+        label: "Türkçe",
+        title: "KVKK Aydınlatma Metni",
+        intro: "Bu sayfadaki metin, uygulama içinde gömülü olarak sunulan gizlilik ve veri işleme açıklaması esas alınarak aynı içerikle yayınlanmaktadır.",
+        updated: "Son güncelleme: 17 Mart 2026",
+        version: "Sürüm: 1.1",
+        languageLabel: "Dil",
+        note: "Veri sorumlusu " + dataControllerName + " olup veri koruma talepleri ve başvurular için temel iletişim kanalı " + supportEmail + " adresidir.",
+        footer: "Bu sayfa, Zikrim uygulamasında yer alan gömülü metinle uyumlu gizlilik açıklamasını kamuya açık olarak sunar.",
+        footerSupport: "Destek merkezi",
+        footerPrivacy: "Gizlilik Politikası",
+        footerTerms: "Apple Standard EULA",
+        sections: [
+          {
+            heading: "Veri Sorumlusu ve Kapsam",
+            paragraphs: [
+              "Zikrim mobil uygulaması kapsamında işlenen kişisel verilere ilişkin bu aydınlatma metni, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun 10. maddesi uyarınca hazırlanmıştır.",
+              "Bu metin bakımından veri sorumlusu, Zikrim uygulamasının yayın ve işletim süreçlerinden sorumlu kişi olan " + dataControllerName + "’dir. Veri koruma talepleri ve başvurular için temel iletişim kanalı " + supportEmail + " adresidir."
+            ]
+          },
+          {
+            heading: "İşlenen Veri Kategorileri",
+            paragraphs: [
+              "Uygulamanın kullanım şekline göre kimlik ve hesap verileri, e-posta adresi, kullanıcı adı, Apple veya Google ile oturum açma bilgilerine ilişkin sınırlı kimlik doğrulama kayıtları, cihaz ve uygulama sürümü bilgileri, hata ve teknik log kayıtları işlenebilir.",
+              "Namaz vakitleri, kıble, hatırlatıcılar ve kişiselleştirme özellikleri kullanıldığında yaklaşık veya kesin konum verileri, bildirim tercihleri, seçilen dil, tema ve kullanım ayarları işlenebilir. Premium, bulut yedekleme ve yapay zekâ destekli özelliklerin kullanılması halinde abonelik durumu, iCloud senkronizasyon kayıtları ve kullanıcının ilgili alanlara yazdığı içerikler de işleme konusu olabilir.",
+              "Ödeme kartı verileri uygulama tarafından doğrudan tutulmaz; uygulama içi satın alma süreçleri Apple App Store ve ilgili ödeme altyapıları üzerinden yürütülür."
+            ]
+          },
+          {
+            heading: "Toplama Yöntemleri",
+            paragraphs: [
+              "Kişisel veriler; kullanıcı tarafından doğrudan girilen bilgiler, cihaz üzerinden verilen izinler, uygulama içi tercihler, oturum açma sağlayıcıları, Apple sistem servisleri, push bildirim servisleri, bulut senkronizasyon mekanizmaları ve uygulamanın güvenli şekilde çalışması için oluşan teknik kayıtlar aracılığıyla elektronik ortamda toplanabilir.",
+              "Bazı veriler doğrudan ilgili kişiden; bazı veriler ise Apple, Google, Firebase kimlik doğrulama servisleri, abonelik altyapısı sağlayıcıları veya işletim sistemi servisleri gibi üçüncü taraf teknik altyapılardan elde edilebilir."
+            ]
+          },
+          {
+            heading: "İşleme Amaçları",
+            paragraphs: [
+              "Kişisel veriler; kullanıcı hesabının oluşturulması ve yönetilmesi, oturum açma işlemlerinin yürütülmesi, zikir veya dua geçmişi ve tercihlerin korunması, bulut yedekleme ve geri yükleme işlemlerinin sağlanması, premium haklarının doğrulanması ve uygulama deneyiminin kişiselleştirilmesi amaçlarıyla işlenebilir.",
+              "Ayrıca namaz vakti, kıble ve bildirim özelliklerinin çalıştırılması, güvenlik ve suistimal önleme kontrollerinin yürütülmesi, teknik hataların tespiti ve giderilmesi, destek taleplerinin cevaplanması, yapay zekâ destekli özelliklerin sunulması ve mevzuattan doğan yükümlülüklerin yerine getirilmesi için işleme yapılabilir."
+            ]
+          },
+          {
+            heading: "Hukuki Sebepler",
+            paragraphs: [
+              "Kişisel veriler; bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması, veri sorumlusunun hukuki yükümlülüklerini yerine getirmesi, bir hakkın tesisi, kullanılması veya korunması, veri sorumlusunun meşru menfaatleri ve gerektiği hallerde açık rıza hukuki sebeplerine dayanılarak işlenebilir.",
+              "Konum, bildirim, bulut yedekleme ya da üçüncü taraf oturum açma gibi belirli fonksiyonlar bakımından kullanıcıya cihaz veya uygulama düzeyinde tercih ve izin sunulabilir; ilgili özelliğin kapatılması belirli işlevleri sınırlayabilir."
+            ]
+          },
+          {
+            heading: "Aktarım ve Yurt Dışına Veri Aktarımı",
+            paragraphs: [
+              "Kişisel veriler; uygulamanın güvenli ve sürekli şekilde işletilebilmesi amacıyla kimlik doğrulama, barındırma, bildirim, abonelik yönetimi, yapay zekâ altyapısı, teknik destek ve bulut yedekleme hizmeti sunan tedarikçilere, işleme amacıyla sınırlı olmak üzere aktarılabilir.",
+              "Kullanılan servis sağlayıcıların bir kısmı yurt dışında bulunabilir veya verileri yurt dışındaki sunucularda işleyebilir. Bu durumda aktarım süreçleri, yürürlükteki KVKK düzenlemeleri, özellikle 6698 sayılı Kanun’un 9. maddesi ve uygulanabilir güvenceler çerçevesinde yürütülür."
+            ]
+          },
+          {
+            heading: "Saklama Süresi ve İmha",
+            paragraphs: [
+              "Kişisel veriler, ilgili işleme amacının gerektirdiği süre boyunca ve tabi olunan yasal saklama yükümlülükleri ölçüsünde muhafaza edilir. Hesap kapatma, abonelik sona ermesi veya kullanıcının belirli verileri silmesi talepleri değerlendirilirken teknik kayıtlar, yedekler ve mevzuat gereği saklanması gereken veriler bakımından makul saklama süreleri uygulanabilir.",
+              "Saklama süresi sona eren veriler, niteliğine göre silinir, yok edilir veya anonim hale getirilir."
+            ]
+          },
+          {
+            heading: "İlgili Kişi Hakları ve Başvuru Usulü",
+            paragraphs: [
+              "İlgili kişiler, KVKK’nın 11. maddesi kapsamında kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işleme amacını ve amaca uygun kullanılıp kullanılmadığını öğrenme, yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme, eksik veya yanlış işlenmiş olması halinde düzeltilmesini isteme ve şartları varsa silme veya yok edilmesini talep etme haklarına sahiptir.",
+              "Ayrıca yapılan düzeltme, silme veya yok etme işlemlerinin verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme, işlenen verilerin münhasıran otomatik sistemler aracılığıyla analiz edilmesi sebebiyle aleyhe bir sonucun ortaya çıkmasına itiraz etme ve kanuna aykırı işleme sebebiyle zarara uğranması halinde zararın giderilmesini talep etme hakları da bulunmaktadır.",
+              "Başvurular, kimliği doğrulanabilir şekilde " + supportEmail + " adresine iletilebilir. Başvurular, niteliğine göre KVKK ve ikincil düzenlemelerde öngörülen süreler içinde değerlendirilir."
+            ]
+          }
+        ]
+      },
+      en: {
+        label: "English",
+        title: "KVKK Information Notice",
+        intro: "The text on this page is published to match the privacy and data processing notice embedded inside the application.",
+        updated: "Last updated: March 17, 2026",
+        version: "Version: 1.1",
+        languageLabel: "Language",
+        note: "The data controller is " + dataControllerName + ", and the main contact channel for data protection requests and applications is " + supportEmail + ".",
+        footer: "This page publicly presents the privacy notice in alignment with the embedded text used inside the Zikrim application.",
+        footerSupport: "Support Center",
+        footerPrivacy: "Privacy Policy",
+        footerTerms: "Apple Standard EULA",
+        sections: [
+          {
+            heading: "Data Controller and Scope",
+            paragraphs: [
+              "This information notice has been prepared under Article 10 of Turkish Personal Data Protection Law No. 6698 for personal data processed within the scope of the Zikrim mobile application.",
+              "For the purposes of this notice, the data controller is " + dataControllerName + ", the person responsible for the publication and operation of the Zikrim application. The main contact channel for data protection requests is " + supportEmail + "."
+            ]
+          },
+          {
+            heading: "Categories of Personal Data Processed",
+            paragraphs: [
+              "Depending on how the application is used, identity and account data, email address, username, limited authentication logs related to Sign in with Apple or Google, device and app version information, and error or technical logs may be processed.",
+              "When prayer times, qibla, reminders, and personalization features are used, approximate or precise location data, notification preferences, selected language, theme, and usage settings may also be processed. If premium, cloud backup, or AI-assisted features are used, subscription status, iCloud sync records, and content entered by the user in related fields may also be processed.",
+              "Payment card data is not stored directly by the application; in-app purchase processes are handled through Apple App Store and related payment infrastructures."
+            ]
+          },
+          {
+            heading: "Methods of Collection",
+            paragraphs: [
+              "Personal data may be collected electronically through information entered directly by the user, permissions granted on the device, in-app preferences, sign-in providers, Apple system services, push notification services, cloud sync mechanisms, and technical records created for the secure functioning of the application.",
+              "Some data is obtained directly from the data subject, while some may be obtained from third-party technical infrastructures such as Apple, Google, Firebase authentication services, subscription infrastructure providers, or operating system services."
+            ]
+          },
+          {
+            heading: "Purposes of Processing",
+            paragraphs: [
+              "Personal data may be processed to create and manage the user account, run sign-in flows, preserve dhikr or dua history and preferences, enable cloud backup and restore, verify premium entitlements, and personalize the application experience.",
+              "Processing may also take place to operate prayer time, qibla, and notification features, perform security and abuse-prevention checks, detect and resolve technical issues, respond to support requests, provide AI-assisted features, and comply with legal obligations."
+            ]
+          },
+          {
+            heading: "Legal Bases",
+            paragraphs: [
+              "Personal data may be processed on legal bases such as necessity for the establishment or performance of a contract, compliance with legal obligations, establishment, exercise or protection of a right, legitimate interests of the data controller, and explicit consent where required.",
+              "For certain functions such as location, notifications, cloud backup, or third-party sign-in, the user may be offered permissions and preferences at device or app level; disabling the relevant feature may limit certain functionalities."
+            ]
+          },
+          {
+            heading: "Transfers and International Data Transfers",
+            paragraphs: [
+              "Personal data may be transferred, limited to the relevant processing purpose, to suppliers providing authentication, hosting, notifications, subscription management, AI infrastructure, technical support, and cloud backup services required for the secure and continuous operation of the application.",
+              "Some service providers used by the application may be located abroad or may process data on servers outside Turkey. In such cases, transfer processes are handled in accordance with applicable Turkish data protection rules, especially Article 9 of Law No. 6698 and relevant safeguards."
+            ]
+          },
+          {
+            heading: "Retention and Disposal",
+            paragraphs: [
+              "Personal data is retained for as long as required by the relevant processing purpose and to the extent necessary under applicable legal retention obligations. When account closure, subscription end, or user deletion requests are evaluated, reasonable retention periods may still apply for technical logs, backups, and data that must be retained under law.",
+              "Once the retention period ends, data is deleted, destroyed, or anonymized depending on its nature."
+            ]
+          },
+          {
+            heading: "Data Subject Rights and Application Procedure",
+            paragraphs: [
+              "Under Article 11 of the KVKK, data subjects have the right to learn whether their personal data is processed, request information if it has been processed, learn the purpose of processing and whether it is used accordingly, know the third parties to whom data is transferred domestically or abroad, request correction if data is incomplete or inaccurate, and request deletion or destruction where conditions are met.",
+              "They also have the right to request notification of correction, deletion, or destruction to third parties receiving the data, object to adverse consequences arising exclusively from automated analysis, and claim compensation if they suffer damage due to unlawful processing.",
+              "Applications may be sent to " + supportEmail + " in a manner that allows identity verification. Requests are assessed within the periods required by Turkish data protection rules and secondary legislation."
+            ]
+          }
+        ]
+      }
+    };
+
+    const select = document.getElementById("languageSelect");
+    Object.entries(translations).forEach(([code, content]) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.textContent = content.label;
+      select.appendChild(option);
+    });
+
+    const resolveInitialLanguage = () => {
+      const browserCode = (navigator.language || "en").slice(0, 2).toLowerCase();
+      return translations[browserCode] ? browserCode : "en";
+    };
+
+    const render = (code) => {
+      const content = translations[code] || translations.en;
+      document.documentElement.lang = code;
+      document.getElementById("title").textContent = content.title;
+      document.getElementById("intro").textContent = content.intro;
+      document.getElementById("updated").textContent = content.updated;
+      document.getElementById("version").textContent = content.version;
+      document.getElementById("email").textContent = supportEmail;
+      document.getElementById("languageLabel").textContent = content.languageLabel;
+      document.getElementById("note").textContent = content.note;
+      document.getElementById("footer").textContent = content.footer;
+      document.getElementById("footerSupport").textContent = content.footerSupport;
+      document.getElementById("footerPrivacy").textContent = content.footerPrivacy;
+      document.getElementById("footerTerms").textContent = content.footerTerms;
+
+      const sections = document.getElementById("sections");
+      sections.innerHTML = "";
+
+      content.sections.forEach((section) => {
+        const card = document.createElement("section");
+        card.className = "section-card";
+
+        const title = document.createElement("h2");
+        title.textContent = section.heading;
+        card.appendChild(title);
+
+        const body = document.createElement("div");
+        body.className = "section-body";
+
+        section.paragraphs.forEach((paragraph) => {
+          const p = document.createElement("p");
+          p.textContent = paragraph;
+          body.appendChild(p);
+        });
+
+        card.appendChild(body);
+        sections.appendChild(card);
+      });
+    };
+
+    const initial = resolveInitialLanguage();
+    select.value = initial;
+    render(initial);
+    select.addEventListener("change", (event) => render(event.target.value));
+  </script>
+</body>
+</html>

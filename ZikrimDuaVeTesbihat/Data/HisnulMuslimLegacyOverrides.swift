@@ -1,0 +1,73 @@
+import Foundation
+
+struct HisnulMuslimLegacyOverride {
+    let arabicText: String
+    let title: String
+    let transliteration: String
+    let meaning: String
+    let purpose: String
+}
+
+enum HisnulMuslimLegacyOverrides {
+    static func matching(arabicText: String) -> HisnulMuslimLegacyOverride? {
+        let normalized = normalizeArabic(arabicText)
+        guard !normalized.isEmpty else { return nil }
+        return entriesByArabic[normalized]
+    }
+
+    private static let entriesByArabic: [String: HisnulMuslimLegacyOverride] = Dictionary(
+        uniqueKeysWithValues: entries.map { (normalizeArabic($0.arabicText), $0) }
+    )
+
+    private static let entries: [HisnulMuslimLegacyOverride] = [
+        .init(arabicText: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ", title: "Sabah Azkarı — Ayetel Kürsi", transliteration: "Allâhu lâ ilâhe illâ Hüvel-Hayyül-Kayyûm", meaning: "Allah, kendisinden başka hiçbir ilah olmayandır; O, daima diridir, her şeyi ayakta tutandır.", purpose: "Sabah 1 defa okuyan akşama kadar cinlerden, insanlardan ve her türlü kötülükten korunur. (Hadis: Müslim)"),
+        .init(arabicText: "قُلْ هُوَ اللَّهُ أَحَدٌ • قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ • قُلْ أَعُوذُ بِرَبِّ النَّاسِ", title: "Sabah Azkarı — Üç İhlas & Muavvizeteyn", transliteration: "Kul huvallâhu ehad, kul eûzu birabbil felak, kul eûzu birabbin nâs", meaning: "İhlas, Felak ve Nas surelerinin okunması.", purpose: "Her biri 3 defa okunursa her şeye karşı yeterli olur. (Hadis: Ebû Dâvûd)"),
+        .init(arabicText: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ", title: "Sabah Azkarı — Seyyidü'l İstiğfar", transliteration: "Allâhümme ente rabbî lâ ilâhe illâ ente halaktenî ve ene abdüke ve ene alâ ahdike ve va'dike mestetatu", meaning: "Allah'ım Sen benim Rabbimsin. Senden başka ilah yoktur. Sen beni yarattın. Ben Senin kulunum.", purpose: "Sabah okuyan ve aynı gün akşama çıkmadan ölürse cennete girer. (Hadis: Buhârî)"),
+        .init(arabicText: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", title: "Sabah Azkarı — Eûzü Kelimât", transliteration: "Eûzü bi-kelimâtillâhit-tâmmâti min şerri mâ halak", meaning: "Yarattığı şeylerin şerrinden Allah'ın eksiksiz kelimeleriyle sığınırım.", purpose: "Akşam 3 defa okuyan, o gece hiçbir zehirden zarar görmez. (Hadis: Müslim)"),
+        .init(arabicText: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ", title: "Sabah Azkarı — Bismillah Korunma", transliteration: "Bismillâhillezî lâ yedurru mea'smihî şey'ün fil-ardi ve lâ fis-semâ'i ve hüves-semîul-alîm", meaning: "O'nun adıyla beraber yerde ve gökte hiçbir şey zarar veremez. O, işitir ve bilir.", purpose: "Sabah-akşam 3 defa okuyanı hiçbir musibet ve ani bela çarpmaz. (Hadis: Tirmizî)"),
+        .init(arabicText: "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا", title: "Sabah Azkarı — Rıza Duası", transliteration: "Radîtü billâhi rabben ve bil-islâmi dînen ve bi-Muhammedin nebiyyâ", meaning: "Allah'ı Rab, İslam'ı din, Muhammed'i (s.a.v.) peygamber olarak kabul ettim.", purpose: "Sabah ve akşam 3 defa okuyanın cennete girmeyi hak etmesi Allah üzerine borç olur. (Hadis: Ebû Dâvûd)"),
+        .init(arabicText: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", title: "Sabah Azkarı — Sübhanallah 100", transliteration: "Sübhânallâhi ve bihamdih", meaning: "Allah'ı hamdiyle tesbih ederim.", purpose: "Sabah 100 defa okuyan, kıyamete kadar hiç kimse ondan daha fazla sevap getiremez. (Hadis: Müslim)"),
+        .init(arabicText: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ", title: "Akşam Azkarı — Hasbiyal Kelimesi", transliteration: "Hasbiyallâhü lâ ilâhe illâ Hüve aleyhi tevekkeltü ve Hüve Rabbül-arşil-azîm", meaning: "Allah bana yeter. O'ndan başka ilah yoktur. O'na dayandım. O büyük arşın Rabbidir.", purpose: "Sabah-akşam 7 defa okuyanın dünya ve ahiret işleri için Allah yeter. (Hadis: Ebû Dâvûd)"),
+        .init(arabicText: "بِسْمِ اللَّهِ", title: "Yemek Öncesi Dua", transliteration: "Bismillâh", meaning: "Allah'ın adıyla.", purpose: "Yemeğe başlarken söylenir. Söylemeden başlarsa hatırladığında ekler: Bismillâhi evvelehû ve âhirehû."),
+        .init(arabicText: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ", title: "Yemek Sonrası Dua", transliteration: "Elhamdülillâhillezî at'amenî hâzâ ve razakanîhi min ğayri havlin minnî ve lâ kuvvetin", meaning: "Bana bunu yediren ve benden hiçbir güç ve kuvvet olmaksızın rızıklandıran Allah'a hamd olsun.", purpose: "Yemekten sonra söylenir. Geçmiş günahları bağışlanır. (Hadis: Tirmizî)"),
+        .init(arabicText: "بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا", title: "Eve Girerken Dua", transliteration: "Bismillâhi velecnâ ve bismillâhi harecnâ ve alâllâhi rabbinâ tevekkelnâ", meaning: "Allah'ın adıyla girdik, Allah'ın adıyla çıktık ve Rabbimiz Allah'a tevekkül ettik.", purpose: "Eve girerken söylenir. Şeytan: 'Burada geceleme yeriniz ve akşam yemeğiniz yok' der ve çıkar. (Hadis: Ebû Dâvûd)"),
+        .init(arabicText: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", title: "Evden Çıkarken Dua", transliteration: "Bismillâhi tevekkeltü alâllâhi lâ havle ve lâ kuvvete illâ billâh", meaning: "Allah'ın adıyla, Allah'a dayandım. Güç ve kuvvet yalnız Allah'tandır.", purpose: "Evden çıkarken okunur. Bir melek 'İhtiyacın giderildi, korudun ve yönlendirildim' der. (Hadis: Tirmizî)"),
+        .init(arabicText: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ", title: "Camiye Girerken Dua", transliteration: "Allâhümme'ftah lî ebvâbe rahmetike", meaning: "Allah'ım, bana rahmetinin kapılarını aç.", purpose: "Camiye sağ ayakla girerken okunur. (Hadis: Müslim)"),
+        .init(arabicText: "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ", title: "Camiden Çıkarken Dua", transliteration: "Allâhümme innî es'elüke min fadlik", meaning: "Allah'ım, Senden fazlından istiyorum.", purpose: "Camiden sol ayakla çıkarken okunur. (Hadis: Müslim)"),
+        .init(arabicText: "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلَاةِ الْقَائِمَةِ آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ", title: "Ezan Duası (Sonrası)", transliteration: "Allâhümme rabbe hâzihi'd-da'vetit-tâmmeti ve's-salâtil-kâimeti âti Muhammeden el-vesîlete vel-fadîlete", meaning: "Allah'ım, bu tam ve eksiksiz çağrının ve kılınacak namazın Rabbi! Muhammed'e vesileyi ve fazileti ver.", purpose: "Ezan bitiminde okuyanın kıyamet gününde şefaate nail olması umulur. (Hadis: Buhârî)"),
+        .init(arabicText: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ", title: "Uyanırken Dua", transliteration: "Elhamdülillâhillezî ahyânâ ba'de mâ emâtenâ ve ileyhin-nüşûr", meaning: "Bizi öldürdükten sonra dirilten Allah'a hamd olsun. Dönüş O'nadır.", purpose: "Uykudan kalkarken söylenir."),
+        .init(arabicText: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", title: "Uyumadan Önce Dua", transliteration: "Bismikellâhümme emûtü ve ahyâ", meaning: "Allah'ım, Senin adınla ölür ve yaşarım.", purpose: "Uyumadan önce okunur. (Hadis: Buhârî)"),
+        .init(arabicText: "اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا", title: "Yolculuk Duası", transliteration: "Allâhu ekber, Allâhu ekber, Allâhu ekber. Sübhânellezî sahhara lenâ hâzâ", meaning: "Allah en büyüktür (x3). Bunu bize boyun eğdireni tesbih ederiz.", purpose: "Yolculuğa çıkarken binite binildiğinde okunur. (Hadis: Müslim)"),
+        .init(arabicText: "لَا بَأْسَ طَهُورٌ إِنْ شَاءَ اللَّهُ", title: "Hasta Ziyaretinde Dua", transliteration: "Lâ be'se tahûrun inşâallâh", meaning: "Üzülme, inşaallah bir temizliktir.", purpose: "Hasta ziyaretinde hastaya söylenir. (Hadis: Buhârî)"),
+        .init(arabicText: "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ اشْفِ أَنْتَ الشَّافِي لَا شِفَاءَ إِلَّا شِفَاؤُكَ شِفَاءً لَا يُغَادِرُ سَقَمًا", title: "Hastaya Okunacak Dua", transliteration: "Allâhümme rabben-nâsi ezhibil be'se'şfi ente'ş-şâfî lâ şifâ'e illâ şifâuke şifâ'en lâ yüğâdiru sekamen", meaning: "Allah'ım, insanların Rabbi! Hastalığı gider. Şifayı ver. Şifa veren Sensin. Senin şifandan başka şifa yok.", purpose: "Hasta için okunur. 7 defa uygulanır. (Hadis: Buhârî)"),
+        .init(arabicText: "بِسْمِ اللَّهِ • أَعُوذُ بِعِزَّةِ اللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ", title: "Ağrıya Rukye", transliteration: "Bismillâh (x3) — Eûzü bi-izzatillâhi ve kudratihî min şerri mâ ecidu ve uhâzir (x7)", meaning: "Allah'ın ismiyle. Allah'ın izzetine ve kudretine sığınırım; hissettiğim ve çekindiğim şeyin şerrinden.", purpose: "Vücutta hissedilen ağrıya okunur. Eliyle o yere 7 defa okunur. (Hadis: Müslim)"),
+        .init(arabicText: "اللَّهُمَّ إِنِّي عَبْدُكَ وَابْنُ عَبْدِكَ وَابْنُ أَمَتِكَ نَاصِيَتِي بِيَدِكَ مَاضٍ فِيَّ حُكْمُكَ عَدْلٌ فِيَّ قَضَاؤُكَ", title: "Sıkıntı ve Keder Duası", transliteration: "Allahumme innî abdüke ve'bnü abdike ve'bnü emetike nâsiyetî bi-yedike mâdın fiyye hükmüke, adlün fiyye kadâuke", meaning: "Allah'ım, ben Senin kulunum; babam da annem de Senin kullarındandır. Benim iradem ve kaderim Senin elindedir. Hükmün hakkımda mutlaka geçerlidir ve takdirin tam bir adalettir.", purpose: "Sıkıntı, keder ve gam anında okunur. Kalbe ferahlık ve teslimiyet verir. (Hadis: Ahmed)"),
+        .init(arabicText: "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ", title: "Borç ve Sıkıntı Duası", transliteration: "Allâhümme'kfinî bi-halâlike an harâmike ve ağninî bi-fadlıke ammen sivâk", meaning: "Allah'ım, helal rızkınla beni haramdan uzak tut ve fazlınla beni senden başkasına muhtaç etme.", purpose: "Dağ gibi borcu olsa Allah öder. (Hadis: Tirmizî)"),
+        .init(arabicText: "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ", title: "Abdest Bitiminde Dua", transliteration: "Eşhedü en lâ ilâhe illallâhü vahdehû lâ şerîke lehû ve eşhedü enne Muhammeden abdühû ve rasûlüh", meaning: "Allah'tan başka ilah olmadığına, O'nun bir olduğuna ve ortağı bulunmadığına şehadet ederim.", purpose: "Abdest sonrası okunursa cennetin 8 kapısı açılır. (Hadis: Müslim)"),
+        .init(arabicText: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَهَا وَخَيْرَ مَا فِيهَا وَخَيْرَ مَا أُرْسِلَتْ بِهِ", title: "Rüzgar Eserken Dua", transliteration: "Allâhümme innî es'elüke hayraha ve hayra mâ fîhâ ve hayra mâ ürsilet bih", meaning: "Allah'ım, bu rüzgarın hayırlısını ve içindekinin hayırlısını ve onunla gönderilenlerin hayırlısını istiyorum.", purpose: "Kuvvetli rüzgar estiğinde okunur. (Hadis: Müslim)"),
+        .init(arabicText: "الْحَمْدُ لِلَّهِ الَّذِي بِنِعْمَتِهِ تَتِمُّ الصَّالِحَاتُ", title: "Nimet Şükrü Duası", transliteration: "Elhamdülillâhillezî bi-ni'metihî tetimmüs-sâlihât", meaning: "Nimetleriyle iyiliklerin tamamlandığı Allah'a hamd olsun.", purpose: "Bir nimet geldiğinde ve güzel bir şey görüldüğünde okunur. (Hadis: İbn Mâce)"),
+        .init(arabicText: "إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ اللَّهُمَّ أْجُرْنِي فِي مُصِيبَتِي وَأَخْلِفْ لِي خَيْرًا مِنْهَا", title: "Musibet Anında Dua", transliteration: "İnnâ lillâhi ve innâ ileyhi râciûn. Allâhümme'cürnî fî musîbetî ve ahlif lî hayran minhâ", meaning: "Şüphesiz biz Allah'a aitiz ve O'na dönücüleriz. Musibetimde bana ecir ver ve daha iyisini nasip et.", purpose: "Bir musibet geldiğinde okunursa Allah daha iyisini verir. (Hadis: Müslim)"),
+        .init(arabicText: "اللَّهُمَّ اكْفِنِيهِمْ بِمَا شِئْتَ", title: "Düşmandan Korunma Duası", transliteration: "Allâhümmekfinîhim bi-mâ şi'te", meaning: "Allah'ım, onlara karşı dilediğin şekilde bana yetici ol.", purpose: "Zalim ya da düşmandan korkan kişi okur. (Hadis: Müslim)"),
+        .init(arabicText: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِنْ لِسَانِي يَفْقَهُوا قَوْلِي", title: "Sınav ve İş Başında Dua", transliteration: "Rabbişrah lî sadrî ve yessir lî emrî vahlul ukdeten min lisânî yefkahû kavlî", meaning: "Rabbim, göğsümü genişlet, işimi kolaylaştır, dilimden düğümü çöz ki sözümü anlasınlar.", purpose: "Hz. Musa'nın duası. Sınav, sunum ve güç konuşmalar öncesi okunur."),
+        .init(arabicText: "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ نِعْمَ الْمَوْلَى وَنِعْمَ النَّصِيرُ", title: "Kaygı ve Korku Giderme", transliteration: "Hasbünallâhü ve ni'mel vekîl. Ni'mel mevlâ ve ni'men-nasîr", meaning: "Allah bize yeter, O ne güzel vekildir. O ne iyi mevla ve ne iyi yardımcıdır.", purpose: "Hz. İbrahim ateşe atılırken bu duayı okudu. Her sıkıntıda güçlü bir zikirdir."),
+        .init(arabicText: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", title: "Gece Uyanışında Dua", transliteration: "Lâ ilâhe illallâhü vahdehû lâ şerîke leh lehül-mülkü ve lehül-hamdu ve Hüve alâ külli şey'in kadîr", meaning: "Allah'tan başka ilah yoktur; O birdir, ortağı yoktur. Mülk O'nundur, hamd O'nadır. Her şeye kadirdir.", purpose: "Gece uyanıldığında okunur ve ardından dua edilirse kabul olur. (Hadis: Buhârî)"),
+        .init(arabicText: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ", title: "Öfke Halinde Dua", transliteration: "Eûzü billâhi mineş-şeytânir-racîm", meaning: "Kovulmuş şeytandan Allah'a sığınırım.", purpose: "Öfke anında söylenir. Hz. Peygamber şiddetli öfke için bunu öğretti. (Hadis: Buhârî)"),
+        .init(arabicText: "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ", title: "İstihare Duası", transliteration: "Allâhümme innî estahîruke bi-ilmike ve estakdiruke bi-kudratike ve es'elüke min fadlikel-azîm", meaning: "Allah'ım, ilminle Senden hayırlısını istiyorum; kudretinle güç istiyorum ve büyük fazlından diliyorum.", purpose: "Önemli bir karar öncesinde 2 rekat namaz kılıp okunur. (Hadis: Buhârî)")
+    ]
+
+    nonisolated private static func normalizeArabic(_ text: String) -> String {
+        let stripped = text
+            .applyingTransform(.stripCombiningMarks, reverse: false)?
+            .replacingOccurrences(of: "آ", with: "ا")
+            .replacingOccurrences(of: "أ", with: "ا")
+            .replacingOccurrences(of: "إ", with: "ا")
+            .replacingOccurrences(of: "ٱ", with: "ا")
+            .replacingOccurrences(of: "ى", with: "ي")
+            .replacingOccurrences(of: "ة", with: "ه") ?? text
+
+        return stripped.unicodeScalars
+            .filter { CharacterSet.letters.contains($0) }
+            .map(String.init)
+            .joined()
+    }
+}

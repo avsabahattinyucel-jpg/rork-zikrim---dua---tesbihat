@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta name="description" content="Diyanet İşleri Başkanlığı Din İşleri Yüksek Kurulu&#39;nun inanç, ibadet, ahlak ve sosyal hayat ile ilgili güncel fetva, karar ve mütalaalarını bulabilirsiniz. Dini sorularınızı yöneltebilirsiniz." /><meta http-equiv="content-type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" /><meta name="robots" content="all" />
+    <script src="/App_Themes/Fetva/js/jquery-1.12.2.min.js"></script>
+    <script src="/App_Themes/Fetva/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/App_Themes/Fetva/validationengine/jquery.validationEngine.js"></script>
+    <script src="/App_Themes/Fetva/validationengine/jquery.validationEngine-tr.js"></script>
+    <script src="/App_Themes/Fetva/js/bootbox.js"></script>
+    <script src="/App_Themes/Fetva/js/site.js"></script>
+    <script src="/App_Themes/Fetva/js/jquery.mask.js"></script>
+    <link href="/App_Themes/Fetva/validationengine/validationEngine.jquery.css" rel="stylesheet" /><link href="/App_Themes/Fetva/bootstrap/css/bootstrap.min.css" rel="stylesheet" /><link href="/App_Themes/Fetva/font-awesome/css/font-awesome.min.css" rel="stylesheet" /><link href="/App_Themes/Fetva/css/Site.css" rel="stylesheet" /><link href="/App_Themes/Fetva/flags/flags.css" rel="stylesheet" />
+
+    <style>
+        /* MODERN MENÜ STİLLERİ - GRİ TEMA */
+        .navbar-default {
+            background: linear-gradient(135deg, #495057 0%, #6c757d 100%) !important;
+            border: none;
+            border-radius: 0;
+            margin-bottom: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .navbar-nav > li > a {
+            color: #ffffff !important;
+            font-weight: 600;
+            padding: 16px 20px;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-size: 15px;
+        }
+
+            .navbar-nav > li > a:hover,
+            .navbar-nav > li > a:focus {
+                color: #ffffff !important;
+                background-color: rgba(255,255,255,0.15) !important;
+                border-bottom: 3px solid #dee2e6;
+            }
+
+        .navbar-nav > .active > a {
+            background-color: rgba(255,255,255,0.2) !important;
+            border-bottom: 3px solid #dee2e6;
+        }
+
+        /* Menü ikonları */
+        .navbar-nav > li > a i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+            color: #dee2e6;
+            font-size: 16px;
+        }
+
+        /* Dropdown menü stilleri */
+        .dropdown-menu {
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            margin-top: 0;
+            border-top: 3px solid #6c757d;
+        }
+
+            .dropdown-menu > li > a {
+                color: #495057;
+                padding: 10px 20px;
+                transition: all 0.2s ease;
+                font-weight: 500;
+                border-left: 3px solid transparent;
+            }
+
+                .dropdown-menu > li > a:hover {
+                    background-color: #e9ecef;
+                    color: #343a40;
+                    border-left: 3px solid #6c757d;
+                    padding-left: 25px;
+                }
+
+                .dropdown-menu > li > a i {
+                    margin-right: 10px;
+                    color: #6c757d;
+                    font-size: 14px;
+                }
+
+                .dropdown-menu > li > a:hover i {
+                    color: #495057;
+                }
+
+        /* Alt menüler için */
+        .dropdown-submenu {
+            position: relative;
+        }
+
+            .dropdown-submenu > .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -10px;
+                margin-left: -1px;
+                border-radius: 0 8px 8px 8px;
+                background: #e9ecef;
+            }
+
+            .dropdown-submenu:hover > .dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-submenu > a:after {
+                display: block;
+                content: " ";
+                float: right;
+                width: 0;
+                height: 0;
+                border-color: transparent;
+                border-style: solid;
+                border-width: 5px 0 5px 5px;
+                border-left-color: #ffffff;
+                margin-top: 5px;
+                margin-right: -10px;
+            }
+
+        /* Menüdeki caret (ok) rengi */
+        .navbar-nav > li > a .caret {
+            border-top-color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
+
+        /* Dropdown açıkken */
+        .navbar-nav > .open > a .caret {
+            border-top-color: #dee2e6;
+            border-bottom-color: #dee2e6;
+        }
+
+        /*========== MOBİL DÜZELTME – 3. SEVİYE+ DESTEKLİ ==========*/
+   @media (max-width: 767px) {
+    /* 1) Ana menüyü sadece "in" class'ı yönetir */
+    .navbar-collapse {
+        display: none !important;
+    }
+
+    .navbar-collapse.in {
+        display: block !important;
+        background: #495057;
+    }
+
+    /* 2) Menü içeriği taşarsa dikey scroll */
+    #navbar.in {
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 3) 1. seviye linkler - tek sütun */
+    .navbar-nav {
+        float: none !important;
+        margin: 0;
+        width: 100%;
+    }
+
+    .navbar-nav > li > a {
+        border-bottom: 1px solid rgba(255,255,255,.1);
+        padding: 12px 15px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* 4) TÜM dropdown menüler mobilde İÇ İÇE görünür */
+    .dropdown-menu,
+    .dropdown-submenu > .dropdown-menu {
+        position: static !important;
+        float: none;
+        border: none;
+        box-shadow: none;
+        background: rgba(0,0,0,0.15) !important;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        display: none;
+        border-left: 3px solid #dee2e6 !important;
+        width: 100%;
+    }
+
+    /* açık olan menüleri göster */
+    .dropdown.open > .dropdown-menu,
+    .dropdown-submenu.open > .dropdown-menu {
+        display: block;
+    }
+
+    /* 5) 2. ve 3. seviye linkler - SOLA YASLI */
+    .dropdown-menu > li > a,
+    .dropdown-submenu > li > a {
+        color: rgba(255,255,255,0.95) !important;
+        font-weight: 500;
+        padding: 10px 15px 10px 25px;
+        border-left: 3px solid transparent;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .dropdown-menu > li > a:hover,
+    .dropdown-submenu > li > a:hover {
+        background: rgba(255,255,255,0.1);
+        border-left-color: #dee2e6;
+    }
+
+    /* 6) 3. seviye biraz daha içeri - SOLA YASLI */
+    .dropdown-submenu > .dropdown-menu > li > a {
+        padding-left: 35px;
+    }
+
+    /* 7) Ok işaretleri - SOL TARAFA */
+    .dropdown-submenu > a::after {
+        float: right;
+        border-left-color: transparent;
+        border-top-color: rgba(255,255,255,0.8);
+        border-style: solid;
+        border-width: 5px 5px 0 5px;
+        margin-top: 8px;
+        margin-left: 10px;
+        order: 2; /* Ok'u sağa al */
+    }
+
+    .dropdown-submenu.open > a::after {
+        border-width: 0 5px 5px 5px;
+        border-top-color: transparent;
+        border-bottom-color: rgba(255,255,255,0.8);
+    }
+
+    /* 8) Caret (bootstrap ok) gizle */
+    .navbar-nav .caret {
+        display: none;
+    }
+
+    /* 9) Açık menüler için belirgin işaret */
+    .dropdown.open > a,
+    .dropdown-submenu.open > a {
+        background: rgba(255,255,255,0.2) !important;
+        border-left: 3px solid #dee2e6 !important;
+    }
+
+    /* 10) 3. seviye için daha koyu arkaplan */
+    .dropdown-submenu > .dropdown-menu {
+        background: rgba(0,0,0,0.25) !important;
+    }
+
+    /* 11) Menü metinlerini sola yasla */
+    .navbar-nav > li > a,
+    .dropdown-menu > li > a,
+    .dropdown-submenu > li > a {
+        text-align: left;
+        justify-content: flex-start;
+    }
+
+    /* Ok'ları sağa al */
+    .navbar-nav > li > a .caret,
+    .dropdown-submenu > a::after {
+        margin-left: auto;
+    }
+}
+
+        /* Loading spinner */
+        #loading {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            opacity: 0.8;
+            z-index: 99999;
+            padding-top: 200px;
+            text-align: center;
+            font-size: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+            #loading div {
+                background: #fff url('../../App_Themes/Fetva/images/Loading.GIF') no-repeat center 45px;
+                width: 350px;
+                height: 80px;
+                margin: 50px auto;
+                text-align: center;
+                font-size: 24px;
+                padding: 10px 15px 15px 15px;
+                border-radius: 5px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+                border: 2px solid #ccc;
+            }
+
+        .BlackLinkButton {
+            color: #A9A9A9;
+        }
+
+        /* Footer link renkleri */
+        .footer-links a {
+            color: #e9ecef; /* normal footer yazı rengi */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .footer-links a:hover {
+                color: #fff; /* üzerine gelince biraz daha belirgin */
+            }
+    </style>
+
+    
+    
+
+    <!-- Matomo Code -->
+    <script>
+        var _paq = window._paq = window._paq || [];
+        _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "https://webanaliz.diyanet.gov.tr/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '191']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Matomo Code -->
+<title>
+	Din İşleri Yüksek Kurulu : Dini Bilgilendirme Platformu
+</title></head>
+<body>
+    <form method="post" action="./gazli-icecekler-ve-alkol" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="147D8983" />
+<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="aBh7u6znSRR40W688IrnUC0ROZKPh0kjQJhrU/Tp5Ol1xJYGsSTEs9//eCVmwACSP9YfmRzMBxD+ksD5Pn++rY1S6Eyq+mDnTslvCytbbaW0jtuE2ZKcdw3ez4HWPpzF4K5gUvoDEgWenX07+U7sogbaHpkGnuO940SII4sg/aUwZ2rN" />
+        <div class="container container-fluid golgelik">
+            <div id="header" class="row" style="padding: 15px 0;">
+                <div class="col-md-9" style="display: flex; align-items: center;">
+                    <img src="/App_Themes/Fetva/images/logo.png" class="pull-left" id="logo" style="margin-right: 20px;" />
+                    <div>
+                        <p style="margin: 0; color: #666; font-size: 14px; font-weight: 500;">
+                            Türkiye Cumhuriyeti Cumhurbaşkanlığı Diyanet İşleri Başkanlığı
+                        </p>
+                        <h3 class="logo_yazi" style="margin: 5px 0 0; font-weight: 700; font-size: 24px;">
+                            <a href="/" style="color: #1e3c72; text-decoration: none;">
+                                Din İşleri Yüksek Kurulu
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+                <div class="text-right col-md-3" style="padding-top: 10px;">
+                    
+                    <a href="/UyeGiris" style="color: #337ab7;"><i class="glyphicon glyphicon-user"></i>&nbsp;Üye Girişi</a>
+                    
+                    <br />
+                    <div id="dvDilCubugu" class="pull-right" style="margin-top: 10%">
+                        <select name="ctl00$ctl00$ddlDilSec" id="ddlDilSec" class="form-control" style="display: inline">
+	<option selected="selected" value="tr">T&#252;rk&#231;e</option>
+	<option value="en">English</option>
+	<option value="de">Deutsche</option>
+	<option value="ar">عربى</option>
+
+</select>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+            <!-- MENÜ -->
+            <nav class="navbar navbar-default">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <!-- Ana Sayfa -->
+                            <li><a href="/Kurul-Anasayfa"><i class="fa fa-home"></i>Ana Sayfa</a></li>
+
+                            <!-- Kurumsal -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-building"></i>Kurumsal <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/Hakkimizda"><i class="fa fa-info-circle"></i>Hakkımızda</a></li>
+                                    <li><a href="/Mevzuat"><i class="fa fa-gavel"></i>Kurul Mevzuatı</a></li>
+                                    <li><a href="/FetvaYontem"><i class="fa fa-balance-scale"></i>Fetvâ Usulü</a></li>
+                                    <li><a href="/Teskilat-Semasi"><i class="fa fa-sitemap"></i>Teşkilat Şeması</a></li>
+                                    <li><a href="/uzman-yardimcisi-ve-uzman-yeterlikleri"><i class="fa fa-graduation-cap"></i>Uzman Yardımcısı ve Uzman Yeterlikleri</a></li>
+                                </ul>
+                            </li>
+
+                            <!-- Kurul -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-users"></i>Kurul <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <!-- Başkanlık -->
+                                    <li class="dropdown-submenu">
+                                        <a href="#"><i class="fa fa-user-md"></i>Din İşleri Yüksek Kurulu Başkanı</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/din-isleri-yuksek-kurulu/din-isleri-yuksek-kurulu-baskani/1e503436-5224-41de-8f67-ae5800f0fa87"><i class="fa fa-user"></i>Başkanımız</a></li>
+                                            <li><a href="/Emekli-Baskanlarimiz"><i class="fa fa-history"></i>Emekli Başkanlarımız</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <!-- Başkan Vekili -->
+                                    <li><a href="/din-isleri-yuksek-kurulu/din-isleri-yuksek-kurulu-baskanvekili/a8960230-804f-4c39-8914-ae5800f0fa87"><i class="fa fa-user-md"></i>Din İşleri Yüksek Kurulu Başkanvekili</a></li>
+
+                                    <!-- Üyeler -->
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/din-isleri-yuksek-kurulu-uyeleri/befca932-8bb0-4207-ad11-ae5800f0fa87"><i class="fa fa-users"></i>Din İşleri Yüksek Kurulu Üyeleri</a></li>
+
+                                    <!-- Sekreterlik -->
+                                    <li class="dropdown-submenu">
+                                        <a href="#"><i class="fa fa-user-md"></i>Din İşleri Yüksek Kurulu Sekreterliği</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/din-isleri-yuksek-kurulu/din-isleri-yuksek-kurulu-sekreteri/b8267f78-daa0-4d88-90d1-ae5800f0fa87"><i class="fa fa-user-md"></i>Din İşleri Yüksek Kurulu Sekreteri</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <!-- İhtisas Komisyonları -->
+                                    <li class="dropdown-submenu">
+                                        <a href="#"><i class="fa fa-cogs"></i>İhtisas Komisyonları</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/inanc-ve-dini-olusumlar-komisyonu/cda64d01-81ca-44af-85e8-ae5800f0fa36"><i class="fa fa-globe"></i>İnançlar ve Dini Oluşumlar Komisyonu</a></li>
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/ibadetler-komisyonu/8e8e0f35-4455-4758-8dda-ae5800f0fa36"><i class="fa fa-globe"></i>İbadetler Komisyonu</a></li>
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/iktisadi-hayat-ve-saglik-komisyonu/0b4c6405-ffac-49db-863f-ae5800f0fa36"><i class="fa fa-globe"></i>İktisadi Hayat ve Sağlık Komisyonu</a></li>
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/sosyal-hayat-komisyonu/1e5a7528-ba28-46d3-8a6c-ae5800f0fa36"><i class="fa fa-globe"></i>Sosyal Hayat Komisyonu</a></li>
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/kuran-ve-sunnet-komisyonu/89d5e5b7-79d2-417b-9b98-ae5800f0fa36"><i class="fa fa-globe"></i>Kur'an ve Sünnet Komisyonu</a></li>
+                                            <li><a href="/din-isleri-yuksek-kurulu/ihtisas-komisyonlari/yurt-disi-mumasil-kurum-ve-kuruluslarla-iliskiler-komisyonu/019503a4-7ae6-7b51-b1a5-c3128ca4a711"><i class="fa fa-globe"></i>Yurt Dışı Mümasil Kurum ve Kuruluşlarla İlişkiler Komisyonu</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <!-- Personel Kategorileri -->
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/din-isleri-yuksek-kurulu-uzmanlari/59479da5-c406-4d93-a2a9-ae5800f0fa87"><i class="fa fa-users"></i>Din İşleri Yüksek Kurulu Uzmanları</a></li>
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/diyanet-isleri-uzmanlari/3983c00d-ca3c-4e36-9b5b-ae5800f0fa87"><i class="fa fa-users"></i>Diyanet İşleri Uzmanları</a></li>
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/astronomlar/c13780de-dcfb-4dcb-9d87-ae5800f0fa87"><i class="fa fa-star"></i>Astronomlar</a></li>
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/din-hizmetleri-uzmanlari/5ab5234e-2635-4b65-be36-ae5800f0fa87"><i class="fa fa-users"></i>Din Hizmetleri Uzmanları</a></li>
+                                    <li><a href="/din-isleri-yuksek-kurulu/personeller/egitim-uzmanlari/f39f98ec-41a9-4a45-aa86-ae5800f0fa87"><i class="fa fa-users"></i>Eğitim Uzmanları</a></li>
+                                </ul>
+                            </li>
+
+                            <!-- Karar ve Mütalaalar -->
+                            <li>
+                                <a href="/KurulKarar/"><i class="fa fa-file-text-o"></i>Karar ve Mütalaalar</a>
+                            </li>
+
+                            <!-- Yayınlar -->
+                            <li><a href="/Diyanet-Yayinlar"><i class="fa fa-book"></i>Yayınlar</a></li>
+
+                            <!-- Alo Fetva -->
+                            <li><a href="/AloFetva190"><i class="fa fa-phone"></i>190 / Diyanet Fetva Hattı</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            
+
+            <br />
+            
+
+    <div class="row">
+
+        <section class="col-lg-9 col-md-12 col-sm-12">
+            
+      <script type="text/javascript">
+        $(function () {
+            $('#lnkGeri').click(function () {
+                window.history.back();
+            });
+        });
+    </script>
+
+    <style>
+        hr{
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+    </style>
+
+            <div class="well ">
+                <a href="/Kurul-Anasayfa">Anasayfa</a> / <a href="/KurulKarar-Mutalaa/Karar/" >Karar</a>   / <a href="">Gazlı İçecekler ve Alkol</a>
+            </div>
+
+
+    <div class="row">
+        <article class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    
+                    <b>
+                        Din İşleri Yüksek Kurulu Kararları<hr /> Karar Yılı: 2014 - Karar No: 30<hr /> Konusu: Gazlı İçecekler ve Alkol
+                    </b>
+                </div>
+                <div class="panel-body text-center">
+                    
+                        <div class="panel-body" id="metinDiv" align="justify"><span class="paragraf">  &nbsp;&nbsp;&nbsp;<div style="text-align: justify;">
+	&nbsp;</div>
+<div style="text-align: justify;">
+	Dinimizde sarhoşluk veren i&ccedil;kilerin &ccedil;oğu haram olduğu gibi azı da haramdır.M&uuml;sl&uuml;man&#39;ın alkoll&uuml; i&ccedil;ki ve uyuşturucudan uzak durması gerekir. Kur&#39;an-ı Kerim&#39;de, &ldquo;Ey iman edenler! Şarap, kumar, dikili taşlar (putlar) ve şans okları birer şeytan işi pisliktir. Onlardan uzak durun ki, kurtuluşa eresiniz. Şeytan şarap (i&ccedil;ki) ve kumar yoluyla aranıza d&uuml;şmanlık ve kin sokmak ve sizi Allah&#39;ı anmaktan ve namaz kılmaktan alıkoymak ister. Artık (bunlardan) vazge&ccedil;tiniz değil mi?&rdquo; (M&acirc;ide, 5/90-91) buyurulmaktadır.</div>
+<div style="text-align: justify;">
+	Hadislerde de sarhoşluk veren b&uuml;t&uuml;n maddelerin i&ccedil;ilmesi/alınması yasaklanmıştır. Nitekim Hz. Peygamber, &ldquo;Sarhoşluk veren her i&ccedil;ki haramdır&rdquo; (Buh&acirc;ri, Vud&ucirc;, 71; Edeb, 80; M&uuml;slim, Eşribe, 7); &ldquo;&Ccedil;oğu sarhoşluk veren şeyin azı da haramdır&rdquo; (Eb&ucirc; D&acirc;vud, Eşribe, 5: Tirmiz&icirc;, Eşribe, 3) buyurmuştur.</div>
+<div style="text-align: justify;">
+	&Uuml;lkemizde alkols&uuml;z i&ccedil;eceklerle ilgili d&uuml;zenlemeler, 2007/26 tarih ve sayılı &ldquo;T&uuml;rk Gıda Kodeksi-Alkols&uuml;z İ&ccedil;ecekler Tebliği&rdquo; ile yapılmaktadır. Bu Tebliğde alkols&uuml;z i&ccedil;ecekler; &quot;meyveli i&ccedil;ecek, aromalı i&ccedil;ecek, meyveli şurup, aromalı şurup, meyveli i&ccedil;ecek tozu, aromalı i&ccedil;ecek tozu, meyveli doğal mineralli i&ccedil;ecek, aromalı doğal mineralli i&ccedil;ecek, yapay soda, kola, tonik ve aromalı suyu kapsar&rdquo; şeklinde sıralanmakta ve Tebliğin 5. maddesinin (b) bendinde &ldquo;Bu Tebliğ kapsamında yer alan i&ccedil;eceklerde &uuml;retimin doğasından kaynaklanabilecek etil alkol miktarı en &ccedil;ok 3,0 g/L olmalıdır&rdquo; h&uuml;km&uuml; yer almaktadır.</div>
+<div style="text-align: justify;">
+	Bu h&uuml;k&uuml;m, bu t&uuml;r &uuml;r&uuml;nlerin kalite &ouml;zelliklerinin fermantasyon yoluyla değişikliğe uğramasını kontrol etmek amacıyla d&uuml;zenlenmiştir. Bu t&uuml;r alkols&uuml;z i&ccedil;eceklerin &uuml;retiminde &ccedil;eşitli meyve/meyve sularının yanı sıra aromatik bileşikler de kullanılabilmektedir. Meyvelerin b&uuml;nyesinde doğal olarak % 0,1-0,3 oranında alkol bulunabildiği gibi, aromatik bileşenlerin kullanılması durumunda &uuml;r&uuml;n i&ccedil;inde etil alkol, keton, ester vb. bileşikler de oluşabilmektedir. Hatta ekmek de dahil bir&ccedil;ok fermente &uuml;r&uuml;nde &uuml;retim sonucunda az miktarda alkol ortaya &ccedil;ıkabilmektedir. Ancak bu &uuml;r&uuml;nlerin t&uuml;ketilmesi, o gıdanın alkol olarak t&uuml;ketimi anlamına gelmemektedir. Dolayısıyla, bileşiminde % 0,3 gr./litre ve daha az oranda alkol bulunan gıda maddelerinin t&uuml;ketimi, alkol alımı ama&ccedil;lı değildir.</div>
+<div style="text-align: justify;">
+	Diğer taraftan bu t&uuml;r i&ccedil;eceklerde bulunan alkol miktarı ile bir insanı sarhoş edebilecek alkol oranı ve karaciğerin alkol&uuml; par&ccedil;alayarak dışarı atma oranı dikkate alındığında, % 0,3 veya daha az oranda alkol i&ccedil;eren yiyecek ve i&ccedil;eceklerin t&uuml;ketilebilecekleri en &uuml;st d&uuml;zeylerde bile, i&ccedil;erdikleri alkolden dolayı, kişilerin reflekslerinde olumsuz bir gelişmeye neden olmayacakları konunun uzmanları tarafından belirtilmektedir.</div>
+<div style="text-align: justify;">
+	Bu itibarla, s&ouml;z konusu gazlı i&ccedil;eceklerin alkoll&uuml; i&ccedil;ecekler sayılamayacağına karar verildi.</div></span><br /><div align="center"> <button type="button" id="lnkGeri" class="btn btn-md btn-success" >Geri Dön <span class="glyphicon glyphicon-arrow-left" style="color:#468847;"></span></button></div></div>
+                    
+                </div>
+            </div>
+        </article>
+    </div>
+
+        </section>
+        <section class="col-lg-3 col-md-12 col-sm-12">
+            
+                <a class="btn btn-warning btn-block btn-lg" href="https://goruntulufetva.diyanet.gov.tr" target="_blank"><i class="fa fa-film"></i>&nbspGörüntülü Cevaplar</a>
+                <a class="btn btn-warning btn-block btn-lg" href="/DiyanetSikcaTiklananlarSorular/1/Dini-Fetva-Sikca-Sorulan-Sorular"><i class="fa fa-list-ol"></i>&nbspSıkça Sorulanlar </a>
+                <a class="btn btn-warning btn-block btn-lg" href="http://www.diyanet.gov.tr/tr-TR/information/index"><i class="fa fa-book"></i>&nbspDini Bilgiler</a>
+                <a class="btn btn-warning btn-block btn-lg" href="/Diyanet-Dini-Soru-Arama-Listesi"><i class="fa fa-question-circle"></i>&nbspSoru Sor</a>
+                <br />
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><i class="glyphicon glyphicon-indent-right"></i>&nbsp;Konular</div>
+                     <ul class="list-group"  id="accordion"><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#0_d" aria-expanded="false" aria-controls="0"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;ADAK ve YEMİN  </a> <div id="0_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-aa88-722d-2c08-1c8f6aeb236f/adak-ve-yemin-adak" >Adak</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-7503-7477-9908-1c91167252bc/adak-ve-yemin-yemin-ve-cesitleri" >Yemin ve Çeşitleri</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#1_d" aria-expanded="false" aria-controls="1"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;AİLE HAYATI </a> <div id="1_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-e8ec-7b66-7fd0-1cbe48823a0a/aile-hayati-evlilik-oncesi" >Evlilik Öncesi</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-e926-77ba-12ad-1cd71826c1d2/aile-hayati-nafaka-ve-tazminat" >Nafaka ve Tazminat</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-8cae-7553-05e2-1cde59c08f0d/aile-hayati-sut-akrabaligi" >Süt Akrabalığı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-67f1-785c-2741-1ce1efd95a75/aile-hayati-evlat-edinme-ve-koruyucu-aile" >Evlat Edinme ve Koruyucu Aile</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-5155-73b8-5e91-1cef65244ad1/aile-hayati-genel" >Genel</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-ffbe-7246-9fd0-1f9a5ab9f650/aile-hayati-iddet" >İddet</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-6bf4-7990-9123-1fa4356d4878/aile-hayati-evlilik-nikah" >Evlilik (Nikâh)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933638-f2f8-7a68-c217-1fa561b645d8/aile-hayati-bosanma-talak" >Boşanma (Talak)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-2a92-7964-4a45-20bcfeebc3ec/aile-hayati-mehir" >Mehir</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933657-eb33-7bf1-9614-20c149c8e096/aile-hayati-takilar-ve-hediyeler" >Takılar ve Hediyeler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#2_d" aria-expanded="false" aria-controls="2"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;ÇAĞDAŞ İNANÇ PROBLEMLERİ </a> <div id="2_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933658-c6df-78f6-a9e6-1ff4ab77ad7a/cagdas-inanc-problemleri-reenkarnasyon" >Reenkarnasyon</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#3_d" aria-expanded="false" aria-controls="3"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;HAC ve UMRE </a> <div id="3_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933669-0739-7dfb-24d8-1c831731a419/hac-ve-umre-haccin-sartlari-ve-rukunleri" >Haccın Şartları ve Rükünleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-7cc1-77cc-e664-1c85888e2e94/hac-ve-umre-ihram-ve-mikat" >İhram ve Mikat</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-9ae3-797d-55c7-1c87aa6daff0/hac-ve-umre-tavaf-ve-say" >Tavaf ve Sa'y</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-d2f3-7956-c7c2-1c895ef43650/hac-ve-umre-seytan-taslama" >Şeytan Taşlama</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933638-f2cf-7dff-cbd9-1c8a6d31c357/hac-ve-umre-hacca-bedel-gondermek" >Hacca Bedel Göndermek</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-edc0-776e-d575-1d5b07698a69/hac-ve-umre-medine-ziyareti" >Medine Ziyareti</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-8ad9-7600-d9e7-20508ae6dea4/hac-ve-umre-haccin-anlami-hikmet-ve-fazileti" >Haccın Anlamı, Hikmet ve Fazileti</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-7f69-708c-998b-2051d38caaa2/hac-ve-umre-haccin-cesitleri" >Haccın Çeşitleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-9904-7eba-88b8-205606533c83/hac-ve-umre-haccin-vacipleri" >Haccın Vacipleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-2e44-7761-f5dd-20560aa0b068/hac-ve-umre-hacda-islenen-suclar-ve-cezalari" >Hacda İşlenen Suçlar ve Cezaları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-a9f4-7cc0-977d-205bb8f09940/hac-ve-umre-hacla-ilgili-guncel-meseleler" >Hacla İlgili Güncel Meseleler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-6057-7c77-1c89-205eb3c5afcb/hac-ve-umre-hacda-kurban-kesmehedy" >Hacda Kurban Kesme/Hedy</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-d7b3-76f1-129e-205f429f9590/hac-ve-umre-umre-ile-ilgili-hukumler" >Umre İle İlgili Hükümler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-a457-7465-9b8d-205f74f4b9a5/hac-ve-umre-haccin-sunnetleri" >Haccın Sünnetleri</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#4_d" aria-expanded="false" aria-controls="4"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;HAKLAR VE SORUMLULUKLAR </a> <div id="4_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-13c1-7675-8ce4-1b78f82f5da9/haklar-ve-sorumluluklar-insan-haklari-ve-kul-hakki" >İnsan Hakları ve Kul Hakkı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-791b-7940-a624-1b79d0c770e9/haklar-ve-sorumluluklar-aile-ici-haklar-ve-sorumluluklar" >Aile İçi Haklar ve Sorumluluklar </a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-21b8-790a-c3e0-1b86811c43af/haklar-ve-sorumluluklar-toplumsal-gorevler-ve-kamu-hakki" >Toplumsal Görevler ve Kamu Hakkı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-1fe5-74d2-1112-1d5d8bc9ddae/haklar-ve-sorumluluklar-ahlaki-erdemler" >Ahlakî Erdemler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-377b-7897-7323-1d63590bde3a/haklar-ve-sorumluluklar-genel" >Genel</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-babd-73a7-ba8e-20c7fe8fbb9d/haklar-ve-sorumluluklar-adab-i-muaseret" >Âdâb-ı Muâşeret</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#5_d" aria-expanded="false" aria-controls="5"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;HELAL ÜRÜN VE HİZMET </a> <div id="5_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-758f-71dc-af3a-1b775a413bd6/helal-urun-ve-hizmet-katki-maddeleri" >Katkı Maddeleri </a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-c864-7da6-eba8-1b8a5679736a/helal-urun-ve-hizmet-alkol-cesitleri" >Alkol Çeşitleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-294e-73d5-049f-1dbd23c340b5/helal-urun-ve-hizmet-yiyecekler" >Yiyecekler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933658-ed7e-77b1-a4cb-1dc6afc2e391/helal-urun-ve-hizmet-icecekler" >İçecekler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#6_d" aria-expanded="false" aria-controls="6"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;HELALLER VE HARAMLAR </a> <div id="6_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-6e98-74cc-2195-1b7085ad73b6/helaller-ve-haramlar-sosyal-medya" >Sosyal Medya</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-0d80-7dab-9b5a-1b71a37db2d7/helaller-ve-haramlar-kumar-ve-sans-oyunlari" >Kumar ve Şans Oyunları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-d271-7ff5-cbf4-1cac6ac42ec7/helaller-ve-haramlar-giyinme-suslenme" >Giyinme, Süslenme</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-73c4-7165-ecf1-1cadb5cae4fb/helaller-ve-haramlar-sanat-spor-ve-eglence" >Sanat, Spor ve Eğlence</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-2399-740c-4fed-1f79dc47bdbd/helaller-ve-haramlar-kadin-erkek-iliskileri" >Kadın-Erkek İlişkileri</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#7_d" aria-expanded="false" aria-controls="7"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;İBADET, DUA ve TÖVBE </a> <div id="7_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/0193367d-5b32-7094-318f-1c98994b7351/ibadet-dua-ve-tovbe-dua" >Dua</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-8478-78ca-7c96-1d44d187fc69/ibadet-dua-ve-tovbe-zikir" >Zikir </a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-eaf0-711a-333f-1f8295ff376e/ibadet-dua-ve-tovbe-tovbe" >Tövbe</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-387e-7b72-2c30-20957d93d206/ibadet-dua-ve-tovbe-bayramlar-dini-gun-ve-geceler" >Bayramlar, Dini Gün ve Geceler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#8_d" aria-expanded="false" aria-controls="8"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;İNANÇ KONULARIYLA İLGİLİ MESELELER </a> <div id="8_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-078b-746f-ff67-1cbcd204b97c/inanc-konulariyla-ilgili-meseleler-bidat-ve-hurafeler" >Bidat ve Hurafeler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-f860-7ff5-96e2-1dd53db16ac5/inanc-konulariyla-ilgili-meseleler-genel" >Genel</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-549e-7a70-7509-1f811fc0c529/inanc-konulariyla-ilgili-meseleler-buyu-sihir-ve-nazar" >Büyü, Sihir ve Nazar</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-54ed-7b70-9417-1fbe9da0f42a/inanc-konulariyla-ilgili-meseleler-tevessul" >Tevessül</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-1f63-7726-858f-2030eb36c2cf/inanc-konulariyla-ilgili-meseleler-inancta-vesvese" >İnançta Vesvese</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#9_d" aria-expanded="false" aria-controls="9"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;İSLAM İNANCI </a> <div id="9_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-d403-7e53-77fc-1c1308c8ccbd/islam-inanci-allaha-iman" >Allah’a İman</a> <a class="list-group-item"href="/Konu-Cevap-Ara/0193367d-642b-7807-aeee-1c139cd55d00/islam-inanci-meleklere-iman" >Meleklere İman</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-fba2-769f-40bb-1c194a8f1936/islam-inanci-kitaplara-iman" >Kitaplara İman</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933658-bb90-7b96-3bd5-1c2db569a8c1/islam-inanci-peygamberlere-iman" >Peygamberlere İman</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-3146-7878-bdbb-1c30b6ae39e3/islam-inanci-ahirete-iman-olum-kabir-hayati-ve-kiyamet" >Ahirete İman (Ölüm, Kabir Hayatı ve Kıyamet)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-3118-744e-141c-1c32e11d6490/islam-inanci-kaza-ve-kadere-iman" >Kaza ve Kadere İman</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-c6ca-7b82-99e0-1c3325bd3997/islam-inanci-genel" >Genel</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#10_d" aria-expanded="false" aria-controls="10"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;KADINLARA ÖZGÜ HALLER </a> <div id="10_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-4e48-716b-858d-1d5ca5bd6db4/kadinlara-ozgu-haller-hac-ve-umre" >Hac ve Umre</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933638-f500-7f30-3c6b-1d63faa73736/kadinlara-ozgu-haller-adet-dongusuhayiz" >Âdet Döngüsü/Hayız</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-7570-7663-2cd9-2064f6952607/kadinlara-ozgu-haller-abdest-ve-namaz" >Abdest ve Namaz</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-e85e-7723-fbde-20676cde6115/kadinlara-ozgu-haller-menopoz" >Menopoz</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-0b5a-70e1-b79e-20700f4fb3c2/kadinlara-ozgu-haller-istihaze" >İstihâze</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933669-1a94-78c0-b034-20723819327a/kadinlara-ozgu-haller-gebelikhamilelik" >Gebelik/Hamilelik</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-86cb-7892-d0fd-20741e6361a6/kadinlara-ozgu-haller-lohusaliknifas" >Lohusalık/Nifas</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-23c6-7c82-236c-2075fc5d72d6/kadinlara-ozgu-haller-akintilekeler" >Akıntı/Lekeler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#11_d" aria-expanded="false" aria-controls="11"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;KUR'AN-I KERÎM'İN MUHTEVASI, İCAZI VE TARİHİ </a> <div id="11_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-5a82-7c0b-1d68-1fb41a9e9fd6/kuran-i-kerimin-muhtevasi-icazi-ve-tarihi-kuran-i-kerimin-lafiz-ve-mana-iliskisi" >Kur'an-ı Kerim'in Lafız ve Mana İlişkisi</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-2a3a-7284-9ff3-1fb46e529886/kuran-i-kerimin-muhtevasi-icazi-ve-tarihi-kuran-tarihi" >Kur'an Tarihi</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-7e0d-7944-42c2-1fc3f16e725f/kuran-i-kerimin-muhtevasi-icazi-ve-tarihi-kuranin-icazi" >Kur’an’ın İ’câzı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-368d-71c7-e568-1fc60f9d25c9/kuran-i-kerimin-muhtevasi-icazi-ve-tarihi-kuranin-muhtevasi-ana-konulari" >Kur’an’ın Muhtevası (Ana Konuları)</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#12_d" aria-expanded="false" aria-controls="12"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;KUR'AN'IN KIRAATI </a> <div id="12_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-3c40-7a54-2426-1fb669131440/kuranin-kiraati-tecvid-kurallari" >Tecvid Kuralları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933669-1574-7d4c-6d21-1fca38fcd3ee/kuranin-kiraati-kuran-tilavetiyle-ilgili-hukumler" >Kur’an Tilavetiyle İlgili Hükümler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#13_d" aria-expanded="false" aria-controls="13"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;KURBAN </a> <div id="13_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-db3f-7655-c874-1c8f1ed18d01/kurban-kurban-kesmenin-hukmu-ve-hikmetleri" >Kurban Kesmenin Hükmü ve Hikmetleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933638-dc71-7765-4832-1d2eb44ac424/kurban-kurban-cesitleri" >Kurban Çeşitleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-0961-7d23-7547-1d316abea8c6/kurban-kurban-kesen-ile-ilgili-konular" >Kurban Kesen İle İlgili Konular</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-35e5-7a5c-39aa-1d325599c757/kurban-kurbanlik-hayvanla-ilgili-meseleler" >Kurbanlık Hayvanla İlgili Meseleler</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#14_d" aria-expanded="false" aria-controls="14"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;MEZHEPLER VE DİNİ OLUŞUMLAR </a> </li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#15_d" aria-expanded="false" aria-controls="15"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;MİRAS ve VASİYET </a> <div id="15_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-b963-77c8-c55a-1d4704a87af4/miras-ve-vasiyet-miras" >Miras</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-4247-74df-dda5-1d47117c3b45/miras-ve-vasiyet-vasiyet" >Vasiyet</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#16_d" aria-expanded="false" aria-controls="16"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;NAMAZ </a> <div id="16_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933659-0f04-7e5f-59c4-1c4626890da6/namaz-genel-konular" >Genel Konular</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-d1d8-767d-2051-1c492fb5adcf/namaz-vitir-namazi" >Vitir Namazı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-aa68-7538-2f2f-1c4ac1e1d34f/namaz-namazin-vacipleri" >Namazın Vacipleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-bedc-751d-9042-1c4d27245b0a/namaz-namazi-bozan-seyler" >Namazı Bozan Şeyler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-e85c-7866-fcbe-1c523b136840/namaz-ezan-kamet-ve-tesbihat" >Ezan, Kamet ve Tesbihat</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-4468-7745-df44-1c53feba2f57/namaz-imamet-ve-cemaat" >İmamet ve Cemaat</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-8841-7e71-e16c-1c56c0800585/namaz-cuma-namazi" >Cuma Namazı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-c78d-7bf4-e265-1c582a4052a6/namaz-nafile-namazlar" >Nafile Namazlar</a> <a class="list-group-item"href="/Konu-Cevap-Ara/0193367d-5993-72f6-4bac-1c587dfdc4a1/namaz-teravih-namazi" >Teravih Namazı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-eeb4-7179-35f8-1c5a1a683124/namaz-hasta-namazi" >Hasta Namazı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-8194-75b3-66bf-1c5a6ac844b7/namaz-seferilik-kasr-ve-cem" >Seferilik. Kasr ve Cem</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-b68b-7dfe-d55a-1c5b2416a9ba/namaz-namazlarin-kazasi" >Namazların Kazası</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-85cf-7c90-96ca-1c5cc5143df6/namaz-sehiv-secdesi-ve-tilavet-secdesi" >Sehiv Secdesi ve Tilavet Secdesi</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-e8af-7740-70a9-1c5f51af5cc3/namaz-cenaze-namazi" >Cenaze Namazı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-6d35-70a2-6723-1d4d13d97ca4/namaz-namazin-farzlari" >Namazın Farzları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-30e4-70a6-4c77-1d4d9c11129f/namaz-namazin-sunnetleri-ve-adabi" >Namazın Sünnetleri ve Adabı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-814e-7427-495f-1d4e2cdcaa1a/namaz-namazin-mekruhlari" >Namazın Mekruhları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-f5ce-7f23-459d-1d5169256b91/namaz-cenaze-ile-ilgili-konular-techiz-tekfin-ve-defin" >Cenaze İle İlgili Konular (Techiz, Tekfin ve Defin)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-1b0f-758b-fff1-20b9c14e563e/namaz-namazin-onemi-ve-hikmeti" >Namazın Önemi ve Hikmeti</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-ef5f-70de-fe89-20c94dd4613b/namaz-bayram-namazi" >Bayram Namazı</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#17_d" aria-expanded="false" aria-controls="17"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;ORUÇ </a> <div id="17_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-0356-727a-2066-1c6af38660a3/oruc-orucun-mahiyeti-farzlari-sunnetleri-ve-adabi" >Orucun Mahiyeti, Farzları, Sünnetleri ve Adabı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-7f8e-7a91-b049-1c7074cc2148/oruc-orucu-bozan-ve-kazayi-gerektiren-haller" >Orucu Bozan ve Kazayı Gerektiren Haller</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933638-df98-7b65-9220-1c707d108244/oruc-itikaf" >İtikaf</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-f16e-7f82-1d05-1c74585efdfb/oruc-orucu-bozan-ve-keffareti-gerektiren-haller" >Orucu Bozan ve Keffareti Gerektiren Haller</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-63a9-7f0a-7c5c-1d5919a8af0e/oruc-ramazan-ayi" >Ramazan Ayı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-f36c-75d2-16d1-20432cc24ebc/oruc-orucu-bozmayan-haller" >Orucu Bozmayan Haller</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-3c13-7daf-2608-2047b3586724/oruc-oruc-fidyesi" >Oruç Fidyesi</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-7b1c-71f5-5815-2049b59febb1/oruc-iskat-i-savm" >Iskat-ı Savm</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#18_d" aria-expanded="false" aria-controls="18"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;TASAVVUF </a> <div id="18_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933659-0398-7a82-7e7f-1d29e5e8c9ac/tasavvuf-tasavvuf-dusuncesi" >Tasavvuf Düşüncesi</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#19_d" aria-expanded="false" aria-controls="19"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;TEMİZLİK (TAHARET) </a> <div id="19_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-beca-7cfc-d86c-1c37a8ef6624/temizlik-taharet-temizlikhijyen" >Temizlik/Hijyen</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-a5f5-7fd4-8a39-1c3ab781b4a7/temizlik-taharet-abdest" >Abdest</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-61d2-78b0-dcd6-1c3de6aab64e/temizlik-taharet-gusul" >Gusül</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933657-eb3c-7917-7d1f-1c4029faf048/temizlik-taharet-teyemmum" >Teyemmüm</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-7c18-755d-cc19-1d4ac3433b4b/temizlik-taharet-ozur-hali" >Özür Hali</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-06e3-76ff-2069-1d4bf07bc482/temizlik-taharet-mesh" >Mesh</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-2122-7b9a-1b59-208ae7fe88bf/temizlik-taharet-necaset" >Necaset</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#20_d" aria-expanded="false" aria-controls="20"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;TIP ve SAĞLIK </a> <div id="20_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-b07f-7992-0128-1b916e3aa967/tip-ve-saglik-hayatin-sonu" >Hayatın Sonu</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-99bd-744e-be4d-1b91ce7c1aa4/tip-ve-saglik-cinsel-kimlikcinsiyet-gelisim-bozuklugu" >Cinsel Kimlik/Cinsiyet Gelişim Bozukluğu</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-fc7e-7eaf-e737-1b91fd029edc/tip-ve-saglik-tip-etigi" >Tıp Etiği</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-b7dc-7875-74f8-1f306bece170/tip-ve-saglik-hayatin-baslangici-tup-bebek-ve-embriyo" >Hayatın Başlangıcı, Tüp Bebek ve Embriyo</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-b931-7c94-8b44-1f3499d22170/tip-ve-saglik-dogum-kontrolu-ve-kurtaj" >Doğum Kontrolü ve Kürtaj</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-6aa1-7159-c033-1f8c62ed9561/tip-ve-saglik-organ-nakli" >Organ Nakli</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-7159-76b3-5dd9-1f8de87b41b8/tip-ve-saglik-tedavi" >Tedavi</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#21_d" aria-expanded="false" aria-controls="21"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;TİCARÎ HAYAT </a> <div id="21_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-7aed-70a8-18fa-1b96afd9c1bd/ticari-hayat-katilim-bankaciligi" >Katılım Bankacılığı</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-8118-723c-4093-1ba1120d98ef/ticari-hayat-tasarruf-finansman-islemleri" >Tasarruf Finansman İşlemleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-fe68-7656-5fe7-1cefd6329d3f/ticari-hayat-alisveris-ve-cesitleri" >Alışveriş ve Çeşitleri</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933668-0ec4-77d9-3634-1cf0d964b0cf/ticari-hayat-kira" >Kira</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-4fe5-7056-735f-1cf31a72ae15/ticari-hayat-borc-karz" >Borç (Karz)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-61ec-78be-054a-1cf96c26e09b/ticari-hayat-odunc-ariye" >Ödünç (Âriye)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-6925-71c5-a4c4-1cfc59f88ca1/ticari-hayat-emanet-vedia" >Emanet (Vedîa)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933657-df2f-7c40-2e97-1cfe15a39eda/ticari-hayat-hibe-bagis" >Hibe (Bağış)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-8692-7325-5c40-1cff4ee8f07e/ticari-hayat-vekalet-ve-komisyonculuk" >Vekâlet ve Komisyonculuk</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-9452-7273-089c-1d056cbaa63c/ticari-hayat-kefalet-ve-havale" >Kefalet ve Havale</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-0406-7047-7e06-1d0b65ffeada/ticari-hayat-sirketler-ortakliklar" >Şirketler (Ortaklıklar)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-d030-7f9e-1302-1d0b7f3b8b56/ticari-hayat-guncel-ticari-meseleler" >Güncel Ticarî Meseleler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-a559-7eea-1a0c-1d0bcef28419/ticari-hayat-genel" >Genel</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933639-2f47-7872-9daf-1d37cfe74927/ticari-hayat-bankacilik-islemleri-para-faiz-ve-enflasyon" >Bankacılık İşlemleri (Para, Faiz ve Enflasyon)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933667-17f7-7aac-9647-1f8b2a55090c/ticari-hayat-tazminatlar" >Tazminatlar</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933658-fb85-7134-b262-1f992a08adf3/ticari-hayat-sozlesmeler" >Sözleşmeler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-da15-7f46-bc82-20c6b895e286/ticari-hayat-kredi-karti-debit-kart-vd-kartlar" >Kredi Kartı, Debit Kart, vd. Kartlar</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#22_d" aria-expanded="false" aria-controls="22"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;VAKIF </a> <div id="22_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-d5ff-75ce-99fb-1d33a2d7eb73/vakif-vakif-malinda-tasarruf" >Vakıf Malında Tasarruf</a></div></li><li class="list-group-item"> <a data-toggle="collapse" data-parent="#accordion" href="#23_d" aria-expanded="false" aria-controls="23"><i class=" fa fa-caret-right" style="color: orange;"></i>&nbsp;ZEKAT ve SADAKA </a> <div id="23_d" class="collapse list-group" > <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-cf0e-7597-cf09-1c7bd4f4ae43/zekat-ve-sadaka-zekata-tabi-mallar" >Zekâta Tâbi Mallar</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933666-74ba-730a-1575-1c7ca5452841/zekat-ve-sadaka-zekatin-verilecegi-yerler" >Zekâtın Verileceği Yerler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933665-2188-71e5-6d58-1c81b02e6aa3/zekat-ve-sadaka-sadaka-i-fitir-fitre" >Sadaka-i Fıtır (Fitre)</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933650-a49f-7ae7-2d11-20aadee0e2bd/zekat-ve-sadaka-zekatla-ilgili-guncel-meseleler" >Zekâtla İlgili Güncel Meseleler</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933664-a5a1-760f-4317-20aea28c8abd/zekat-ve-sadaka-kurumsal-zekat-uygulamalari" >Kurumsal Zekât Uygulamaları</a> <a class="list-group-item"href="/Konu-Cevap-Ara/01933657-0701-7043-7a63-20af99dd2822/zekat-ve-sadaka-osur" >Öşür</a></div></li></ul>
+                </div>
+            
+        </section>
+    </div>
+
+    <script>
+        $(function () {
+            var active = true;
+            $('#accordion').on('show.bs.collapse', function () {
+                if (active) $('#accordion .in').collapse('hide');
+            });
+        });
+    </script>
+
+            
+        </div>
+        <!-- KAPANAN CONTAINER DIV -->
+
+        <!-- FOOTER -->
+        <br />
+        <div class="footer" style="background: #6c757d; color: #fff; padding: 40px 0 20px; margin-top: 30px;">
+            <div class="container">
+                <!-- Logo ve Üst Bilgi -->
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-12 text-center">
+                        <img src="/App_Themes/Fetva/images/logo.png" style="height: 50px; margin-bottom: 15px; filter: brightness(0) invert(1);" alt="Din İşleri Yüksek Kurulu" />
+                        <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 0;">
+                            Türkiye Cumhuriyeti Cumhurbaşkanlığı Diyanet İşleri Başkanlığı
+                        </p>
+                        <h5 style="color: #fff; font-weight: 600; margin: 5px 0 0;">
+                            Din İşleri Yüksek Kurulu
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Genel Bağlantılar -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                        <h4 class="footer-title" style="color: #fff; font-weight: 600; margin-bottom: 20px; font-size: 18px;">
+                            <i class="fa fa-link" style="margin-right: 8px;"></i>Genel
+                        </h4>
+                        <ul class="footer-links" style="list-style: none; padding: 0;">
+                            <li><a target="_blank" href="https://kuran.diyanet.gov.tr/">Kur'an-ı Kerim</a></li><li><a target="_blank" href="http://hadis.diyanet.gov.tr/">Hadis-i Şerif</a></li><li><a target="_blank" href="https://hacumre.diyanet.gov.tr/">Hac ve Umre</a></li><li><a target="_blank" href="http://dua.diyanet.gov.tr/">Dualar</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sık Sorulan Sorular -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                        <h4 class="footer-title" style="color: #fff; font-weight: 600; margin-bottom: 20px; font-size: 18px;">
+                            <i class="fa fa-question-circle" style="margin-right: 8px;"></i>Sıkça Sorulanlar
+                        </h4>
+                        <ul class="footer-links" style="list-style: none; padding: 0;">
+                            <li><a target="_blank" href="https://kurul.diyanet.gov.tr/DosyaGoster.aspx?enc=fjOIsAhG5Tj6s%2bQ3gonHz2HE2qGcCYZlpS8icSCP7PWkAB4hWWCLQAzjaaxxDwFPW1jbLSm4oNlOrjTD%2btOdZhXdRn0V6Knng7qHr6NnpZV107dYuGJRCEVWCSk1R7p28FPZiAlpjso2SJxek4NheLiaKFJhzcaVpWB8m8l27RZuHvGnCqe1VZRXLlqXPy73DK0j2zVwC4DslMZc59204w%3d%3d">Hac Sıkça Sorulan Sorular</a></li><li><a target="_blank" href="https://kurul.diyanet.gov.tr/DosyaGoster.aspx?enc=fjOIsAhG5Tj6s%2bQ3gonHz6t4u%2bMEF84ClsORsVzcfC1ORZ%2fK27fKeMygQZi6uvVUoKqGHboizEhXLv1Q4wNS%2btambYK%2bB4I%2fqBiD78oyjtOZTt4qQNJLHM1X93tzjHKXLOQYoiSiuXUjDpnUHACD3YOg4HdkdmUMMfZ1KwtljMK1V%2feLntUGWMHz2w%2bGxXMSaXX7G%2byzyWfCy0b3I59iKA%3d%3d">Kurban Sıkça Sorulan Sorular</a></li><li><a target="_blank" href="https://kurul.diyanet.gov.tr/DosyaGoster.aspx?enc=fjOIsAhG5Tj6s%2bQ3gonHz6XJeDlclLcParq%2fCsfs%2fGn7Dw9Z3cvtQPlk2OnOk3hS%2bbAVjHzJOi7z80QrX9BurPE72FLtj4BPhw%2fKi4B9x8Fv%2fzMcgD6vFPV4OSv1GNGmyjFVl41OjfMWRPcucZfH7DZkRUFfrIakE5ZMrMse7awPEie7s9IF%2b1TN%2b%2f8MhtnZeDWzcVmGtIv4KePhgPXJRA%3d%3d">Zekat Sıkça Sorulanlar</a></li><li><a target="_blank" href="https://kurul.diyanet.gov.tr/DosyaGoster.aspx?enc=fjOIsAhG5Tj6s%2bQ3gonHz2D7QKm4zQD9obH5kZ6cf32skhjxfdhN6PKETR1ScD0rRQ2IBOH6qMPxMv142WiNGd4GOWX1gBQDOmhYOc7ZyolvyFusPwWdT5w%2fP6P5dgE0f4Z8UjXsLrXphxMIWkV%2f5qSsmeCDx0CtNS8%2bdyb%2bageVvCBMZPW%2fk74M8TZXI6icxJ3v46d3rC9OzSjltE2mPQ%3d%3d">Oruç Sıkça Sorulanlar</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Bağlantılar -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                        <h4 class="footer-title" style="color: #fff; font-weight: 600; margin-bottom: 20px; font-size: 18px;">
+                            <i class="fa fa-external-link" style="margin-right: 8px;"></i>Bağlantılar
+                        </h4>
+                        <ul class="footer-links" style="list-style: none; padding: 0;">
+                            <li><a target="_blank" href="http://www.diyanet.gov.tr/tr-TR">Diyanet İşleri Başkanlığı</a></li><li><a target="_blank" href="http://takvim.diyanet.gov.tr/tr-TR">Hicri Takvim Birliği Kongresi</a></li><li><a target="_blank" href="https://diniyayinlar.diyanet.gov.tr/">Web Kütüphanesi</a></li><li><a target="_blank" href="http://www.islamansiklopedisi.info/index.php">TDV İslam Ansiklopedisi</a></li><li><a target="_blank" href="https://namazvakitleri.diyanet.gov.tr/tr-TR">Namaz Vakitleri</a></li><li><a target="_blank" href="https://fetva.diyanet.gov.tr/AloFetva190">ALO FETVA 190</a></li><li><a target="_blank" href="https://awqatsalah.diyanet.gov.tr/index.html">Namaz Vakitleri Api Servisi</a></li><li><a target="_blank" href="https://vakithesaplama.diyanet.gov.tr/">Vakit Hesaplama</a></li><li><a target="_blank" href="https://avrasyafetva.diyanet.gov.tr/">Avrasya Fetva Meclisi</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- İletişim -->
+                    <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                        <h4 class="footer-title" style="color: #fff; font-weight: 600; margin-bottom: 20px; font-size: 18px;">
+                            <i class="fa fa-envelope" style="margin-right: 8px;"></i>İletişim
+                        </h4>
+                        <div class="contact-info" style="font-size: 14px;">
+                            <ul class="footer-links" style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 8px;">
+                                    <a href="/iletisim"
+                                        style="color: #e9ecef; text-decoration: none; transition: color 0.3s;">
+                                        <i class="fa fa-arrow-right" style="margin-right: 8px;"></i>
+                                        İletişim
+                                    </a>
+                                </li>
+                                <li style="margin-bottom: 8px;">
+                                    <i class="fa fa-phone" style="margin-right: 8px;"></i>
+                                    <span style="color: #e9ecef;">+90 (312) 295 85 04 - 295 85 09</span>
+                                </li>
+                                <li style="margin-bottom: 8px;">
+                                    <i class="fa fa-fax" style="margin-right: 8px;"></i>
+                                    <span style="color: #e9ecef;">+90 (312) 295 85 31</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border-color: rgba(255,255,255,0.2); margin: 30px 0;" />
+
+                <!-- Copyright -->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="copyright" style="padding-top: 20px;">
+                            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 14px;">
+                                &copy; 2026 Din İşleri Yüksek Kurulu
+                            </p>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.5;">
+                                Üniversiteler Mah. Dumlupınar Bulv. No : 147/A 06800 Çankaya / ANKARA TÜRKİYE
+                            </p>
+                            <p style="margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 12px;">
+                                <span id="lblVersiyon" class="footerAddress text-center">2018.3.1.730</span>
+                                <span id="lblDatabaseName"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dialogContainer"></div>
+        <div class="fb-share-button" data-href="http://kurul.diyanet.gov.tr/Karar-Mutalaa-Cevap/4486/gazli-icecekler-ve-alkol" data-layout="button_count"></div>
+    </form>
+
+ <script>
+     /* ========== YENİ MOBİL MENÜ SİSTEMİ ========== */
+     $(document).ready(function () {
+         var $win = $(window);
+         var $navbar = $('#navbar');
+         var $toggle = $('.navbar-toggle');
+
+         // Desktop hover efekti
+         function initDesktopHover() {
+             if ($win.width() > 767) {
+                 $('.dropdown').hover(
+                     function () { $(this).addClass('open'); },
+                     function () { $(this).removeClass('open'); }
+                 );
+                 $('.dropdown-submenu').hover(
+                     function () { $(this).addClass('open'); },
+                     function () { $(this).removeClass('open'); }
+                 );
+             }
+         }
+
+         // Mobil menü işleyicisi
+         function initMobileMenu() {
+             if ($win.width() <= 767) {
+                 // Ana menü toggle
+                 $toggle.off('click').on('click', function (e) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     $navbar.toggleClass('in');
+                     $(this).toggleClass('collapsed');
+
+                     // Menü kapanıyorsa tüm alt menüleri kapat
+                     if (!$navbar.hasClass('in')) {
+                         closeAllSubmenus();
+                     }
+                 });
+
+                 // 1. seviye dropdown menüler
+                 $('.navbar-nav > .dropdown > a').off('click').on('click', function (e) {
+                     e.preventDefault();
+                     e.stopPropagation();
+
+                     var $this = $(this);
+                     var $parent = $this.parent();
+                     var $siblings = $parent.siblings('.dropdown');
+
+                     // Diğer menüleri kapat
+                     $siblings.removeClass('open');
+                     $('.dropdown-submenu').removeClass('open');
+
+                     // Tıklanan menüyü aç/kapat
+                     $parent.toggleClass('open');
+                 });
+
+                 // 2. ve 3. seviye submenu menüler
+                 $('.dropdown-submenu > a').off('click').on('click', function (e) {
+                     e.preventDefault();
+                     e.stopPropagation();
+
+                     var $this = $(this);
+                     var $parent = $this.parent();
+                     var $siblings = $parent.siblings('.dropdown-submenu');
+
+                     // Aynı seviyedeki diğer menüleri kapat
+                     $siblings.removeClass('open');
+
+                     // Tıklanan menüyü aç/kapat
+                     $parent.toggleClass('open');
+                 });
+
+                 // Menü dışına tıklama
+                 $(document).on('click', function (e) {
+                     if (!$(e.target).closest('.navbar-collapse').length &&
+                         !$(e.target).closest('.navbar-toggle').length) {
+                         closeAllMenus();
+                     }
+                 });
+
+                 // ESC tuşu
+                 $(document).on('keyup', function (e) {
+                     if (e.keyCode === 27) closeAllMenus();
+                 });
+             }
+         }
+
+         // Tüm alt menüleri kapat
+         function closeAllSubmenus() {
+             $('.dropdown, .dropdown-submenu').removeClass('open');
+         }
+
+         // Tüm menüleri kapat
+         function closeAllMenus() {
+             $navbar.removeClass('in');
+             $toggle.addClass('collapsed');
+             closeAllSubmenus();
+         }
+
+         // Pencere boyutu değişikliği
+         $win.on('resize', function () {
+             closeAllSubmenus();
+             if ($win.width() > 767) {
+                 $navbar.removeClass('in');
+                 $toggle.addClass('collapsed');
+                 initDesktopHover();
+             } else {
+                 initMobileMenu();
+             }
+         });
+
+         // İlk yükleme
+         if ($win.width() > 767) {
+             initDesktopHover();
+         } else {
+             initMobileMenu();
+         }
+     });
+
+     /* ===== Google Analytics ===== */
+     (function (i, s, o, g, r, a, m) {
+         i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+             (i[r].q = i[r].q || []).push(arguments)
+         }, i[r].l = 1 * new Date(); a = s.createElement(o),
+             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+     ga('create', 'UA-154857387-1', 'diyanet.gov.tr');
+     ga('send', 'pageview');
+
+     /* ===== Sayfa yüklenirken spinner ===== */
+     $(function () {
+         var yukleniyorGoster = 1;
+         $("#loading").show();
+         $(window).on('beforeunload', function () {
+             if (yukleniyorGoster === 1) $("#loading").show();
+         });
+         $(window).on('load', function () {
+             $("#loading").fadeOut("slow");
+         });
+     });
+ </script>
+</body>
+</html>
